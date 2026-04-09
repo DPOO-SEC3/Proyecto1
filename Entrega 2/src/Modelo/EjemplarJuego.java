@@ -50,7 +50,7 @@ public class EjemplarJuego {
     }
 
     public void marcarDesaparecido() {
-        this.desaparecido = true;  // corregido: era False (inválido en Java)
+        this.desaparecido = true;
         this.disponible = false;
     }
 }

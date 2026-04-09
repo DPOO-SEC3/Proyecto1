@@ -202,12 +202,8 @@ public class PersistenciaJuegos {
                 jsonEjemplar.getString("estado"),
                 juego
             );
-
-            // Restaurar disponibilidad y veces prestado directamente, sin loops costosos
             ejemplar.setDisponible(jsonEjemplar.getBoolean("disponible"));
             ejemplar.setNumeroDeVecesPrestado(jsonEjemplar.getInt("numeroDeVecesPrestado"));
-
-            // Restaurar estado desaparecido si aplica
             if (jsonEjemplar.optBoolean("desaparecido", false)) {
                 ejemplar.marcarDesaparecido();
             }
