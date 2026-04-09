@@ -1,43 +1,56 @@
 package Modelo;
 
 public class EjemplarJuego {
-	private String nombre;
-	private String estado;
-	private int numeroDeVecesPrestado;
-	private boolean disponible;
-	private JuegoMesa juegoMesa;
-	private boolean desaparecido;
-	
-	public EjemplarJuego(String nombre,String estado,) {
-		this.nombre= nombre;
-		this.estado = estado;
-		this.numeroDeVecesPrestado = 0;
-		this.disponible = true;
-	}
 
-	public String getNombre(){
-		return nombre;
-	}
-	public String getEstado() {
-		return estado;
-	}
-	public int getNumeroDeVecesPrestado() {
-		return numeroDeVecesPrestado;
-	}
-	public boolean isDisponible() {
-		return disponible;
-	}
-	public JuegoMesa getJuegoMesa() {
-		return this.juegoMesa;
-	}
-	private void setDisponible(boolean disponible) {
-		this.disponible = disponible;
-	}
-	private void incrementarVecesPrestado() {
-		this.numeroDeVecesPrestado++;
-	}
-	private void setEstado(String estado) {
-		this.estado = estado;
-	}
-	
+    private String estado;
+    private int numeroDeVecesPrestado;
+    private boolean disponible;
+    private JuegoMesa juegoMesa;
+	private boolean desaparecido;
+
+    public EjemplarJuego(String estado, JuegoMesa juegoMesa) {
+        this.estado = estado;
+        this.juegoMesa = juegoMesa;
+        this.numeroDeVecesPrestado = 0;
+        this.disponible = true;
+		this.desaparecido = false;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+    public int getNumeroDeVecesPrestado() {
+        return numeroDeVecesPrestado;
+    }
+    public boolean isDisponible() {
+        return disponible && !desaparecido;
+    }
+    public JuegoMesa getJuegoMesa() {
+        return juegoMesa;
+    }
+
+    public boolean isDesaparecido() {
+        return desaparecido;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public void setNumeroDeVecesPrestado(int numeroDeVecesPrestado) {
+        this.numeroDeVecesPrestado = numeroDeVecesPrestado;
+    }
+
+    public void incrementarVecesPrestado() {
+        this.numeroDeVecesPrestado++;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void marcarDesaparecido() {
+        this.desaparecido = true;  // corregido: era False (inválido en Java)
+        this.disponible = false;
+    }
 }
