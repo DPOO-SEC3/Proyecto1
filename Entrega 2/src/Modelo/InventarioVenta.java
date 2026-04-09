@@ -13,14 +13,14 @@ public class InventarioVenta {
 	public List<JuegoMesa> getJuegos() {
 		return juegos;
 	}
-	private void agregarJuego(JuegoMesa juego) {
+	protected void agregarJuego(JuegoMesa juego) {
 		if (juegos.size() < CapacidadMaxima) {
 			juegos.add(juego);
 		} else {
 			System.out.println("No se puede agregar el juego. Capacidad máxima alcanzada.");
 		}
 	}
-	private void eliminarJuego(JuegoMesa juego) {
+	protected void eliminarJuego(JuegoMesa juego) {
 		juegos.remove(juego);
 	}
 

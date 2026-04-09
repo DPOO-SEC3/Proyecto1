@@ -16,17 +16,7 @@ import Modelo.InventarioVenta;
 import Modelo.JuegoMesa;
 
 public class PersistenciaJuegos {
-    private static final String NOMBRE="nombre";
-    private static final String ANIOPUBLICACION="anioPublicacion";
-    private static final String EMPRESAFABRICANTE="empresaFabricante";
-    private static final String CATEGORIA="categoria";
-    private static final String MINJUGADORES="minimoJugadores";
-    private static final String MAXJUGADORES="maximoJugadores";
-    private static final String RESTRICCIONEDAD="restriccionEdad";
-    private static final String ESDIFICL="esDificil";
-    private static final String PRECIOVENTA="precioDeVenta";
-    private static final String EJEMPLARES="ejemplares";
-    // 1. GUARDAR JUEGOS Y EJEMPLARES
+
     public void guardarJuegos(List<JuegoMesa> juegos, String ruta) throws Exception {
         JSONObject raiz = new JSONObject();
         JSONArray arrayJuegos = new JSONArray();
@@ -36,13 +26,18 @@ public class PersistenciaJuegos {
             jJson.put("nombre", juego.getNombre());
             jJson.put("categoria", juego.getCategoria());
             jJson.put("precioDeVenta", juego.getPrecioDeVenta());
-            jJson.put()
-            // ... agregar los demás atributos de JuegoMesa ...
+            jJson.put("anioPublicacion",juego.getAnioPublicacion());
+            jJson.put("empresaFabricante",juego.getEmpresaFabricante());
+            jJson.put("minimoJugadores",juego.getMinimoJugadores());
+            jJson.put("maximoJugadores",juego.getMaximoJugadores());
+            jJson.put("restriccionesEdad",juego.getRestriccionesEdad());
+            jJson.put("esDificil",juego.esDificil());
+            jJson.put("ejemplares",juego.getListaEjemplares());
 
             JSONArray arrayEjemplares = new JSONArray();
             for (EjemplarJuego ej : juego.getListaEjemplares()) {
                 JSONObject eJson = new JSONObject();
-                eJson.put("idEjemplar", ej.getNombre()); // Usamos el nombre como ID
+                eJson.put("nombre", ej.getNombre()); // Usamos el nombre como ID
                 eJson.put("estado", ej.getEstado());
                 eJson.put("disponible", ej.isDisponible());
                 arrayEjemplares.put(eJson);
@@ -50,12 +45,9 @@ public class PersistenciaJuegos {
             jJson.put("ejemplares", arrayEjemplares);
             arrayJuegos.put(jJson);
         }
-
         raiz.put("catalogo", arrayJuegos);
         Files.writeString(Paths.get(ruta), raiz.toString(4));
     }
-
-    // 2. CARGAR JUEGOS Y EJEMPLARES
     public List<JuegoMesa> cargarJuegos(String ruta) throws Exception {
         List<JuegoMesa> listaCargada = new ArrayList<>();
         String contenido = Files.readString(Paths.get(ruta));
@@ -69,7 +61,9 @@ public class PersistenciaJuegos {
             JuegoMesa juego = new JuegoMesa(
                 jJson.getString("nombre"),
                 jJson.getString("categoria"),
-                jJson.getDouble("precioDeVenta")
+                jJson.getDouble("precioDeVenta"),
+                jJson.getString("categoria"),
+
             );
 
             // Construir sus Ejemplares
@@ -88,58 +82,5 @@ public class PersistenciaJuegos {
         }
         return listaCargada;
     }
-
-    // 3. GUARDAR INVENTARIOS (Solo IDs)
-    public void guardarInventarios(InventarioPrestamo ip, InventarioVenta iv, String ruta) throws Exception {
-        JSONObject raiz = new JSONObject();
-
-        // IDs de Juegos en Venta
-        JSONArray ventaIds = new JSONArray();
-        for (JuegoMesa j : iv.getJuegos()) {
-            ventaIds.put(j.getNombre());
-        }
-
-        // IDs de Ejemplares en Préstamo
-        JSONArray prestamoIds = new JSONArray();
-        for (EjemplarJuego ej : ip.getEjemplares()) {
-            prestamoIds.put(ej.getNombre()); 
-        }
-
-        raiz.put("nombresJuegosVenta", ventaIds);
-        raiz.put("idsEjemplaresPrestamo", prestamoIds);
-        
-        Files.writeString(Paths.get(ruta), raiz.toString(4));
-    }
-
-    // 4. CARGAR INVENTARIOS (Reconstrucción de referencias)
-    public void cargarInventarios(String ruta, List<JuegoMesa> juegosCargados, InventarioPrestamo ip, InventarioVenta iv) throws Exception {
-        String contenido = Files.readString(Paths.get(ruta));
-        JSONObject raiz = new JSONObject(contenido);
-
-        // Reconstruir Venta
-        JSONArray ventaIds = raiz.getJSONArray("nombresJuegosVenta");
-        for (int i = 0; i < ventaIds.length(); i++) {
-            String nombreBuscado = ventaIds.getString(i);
-            for (JuegoMesa j : juegosCargados) {
-                if (j.getNombre().equals(nombreBuscado)) {
-                    iv.getJuegos().add(j);
-                    break;
-                }
-            }
-        }
-
-        // Reconstruir Préstamo
-        JSONArray prestamoIds = raiz.getJSONArray("idsEjemplaresPrestamo");
-        for (int i = 0; i < prestamoIds.length(); i++) {
-            String idBuscado = prestamoIds.getString(i);
-            // Buscamos el ejemplar dentro de todos los juegos
-            for (JuegoMesa j : juegosCargados) {
-                for (EjemplarJuego ej : j.getListaEjemplares()) {
-                    if (ej.getNombre().equals(idBuscado)) {
-                        ip.getEjemplares().add(ej);
-                        break;
-                    }
-                }
-            }
-        }
+    
 }

@@ -4,7 +4,7 @@ import java.util.List;
 public class InventarioPrestamo {
 	
 	private int CapacidadMaxima;
-	private List<JuegoMesa> juegos;
+	private List<EjemplarJuego> ejemplares;
 	
 	public InventarioPrestamo(int capacidadMaxima) {
 		this.CapacidadMaxima = capacidadMaxima;
@@ -12,18 +12,18 @@ public class InventarioPrestamo {
 	public int getCapacidadMaxima() {
 		return CapacidadMaxima;
 	}
-	public List<JuegoMesa> getJuegos() {
-		return juegos;
+	public List<EjemplarJuego> getEjemplares() {
+		return ejemplares;
 	}
-	private void agregarJuego(JuegoMesa juego) {
-		if (juegos.size() < CapacidadMaxima) {
-			juegos.add(juego);
+	protected void agregarEjemplar(EjemplarJuego ejemplar) {
+		if (ejemplares.size() < CapacidadMaxima) {
+			ejemplares.add(ejemplar);
 		} else {
 			System.out.println("No se puede agregar el juego. Capacidad máxima alcanzada.");
 		}
 	}
-	private void eliminarJuego(JuegoMesa juego) {
-		juegos.remove(juego);
+	protected void eliminarEjemplar(EjemplarJuego ejemplar) {
+		ejemplares.remove(ejemplar);
 	}
 	
 

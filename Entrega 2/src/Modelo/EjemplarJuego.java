@@ -6,7 +6,7 @@ public class EjemplarJuego {
 	private int numeroDeVecesPrestado;
 	private boolean disponible;
 	private JuegoMesa juegoMesa;
-	private boolean ddesaparecido;
+	private boolean desaparecido;
 	
 	public EjemplarJuego(String nombre,String estado,) {
 		this.nombre= nombre;
