@@ -31,6 +31,10 @@ public abstract class Persona {
     public String getLogin() {
         return login;
     }
+    
+    public String getContrasena() {
+        return contrasena;
+    }
 
     public boolean verificarContrasena(String contrasena) {
         return this.contrasena.equals(contrasena);
