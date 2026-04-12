@@ -1,10 +1,16 @@
 package Modelo;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente extends Persona {
 
     private double puntosFidelidadAcumulados;
+    private Mesa mesa;
+    private List<Prestamo> prestamos = new ArrayList<>();
+    private List<Venta> ventas = new ArrayList<>();
+    private List<JuegoMesa> favoritos = new ArrayList<>();
 
     public Cliente(String nombre, String apellido, String correoElectronico, String contrasena, String login, double puntosFidelidadAcumulados) {
         super(nombre, apellido, correoElectronico, contrasena, login);
@@ -16,51 +22,61 @@ public class Cliente extends Persona {
     }
 
     public Mesa getMesa() {
-        return null;
+        return mesa;
     }
 
     public List<Prestamo> getPrestamos() {
-        return null;
+        return prestamos;
     }
 
     public List<Venta> getVentas() {
-        return null;
+        return ventas;
     }
 
     public List<JuegoMesa> getJuegosFavoritos() {
-        return null;
+        return favoritos;
     }
 
     public void ocuparMesa(Mesa mesa, int numPersonas, boolean hayNinos, boolean hayMenores) {
-
+        this.mesa = mesa;
     }
 
     public void liberarMesa() {
-
+        this.mesa = null;
     }
 
     public Prestamo solicitarPrestamo(EjemplarJuego ejemplar) {
-        return null;
+        Prestamo p = new Prestamo(LocalDateTime.now(), null, "activo");
+        prestamos.add(p);
+        return p;
     }
 
     public void devolverJuego(Prestamo prestamo) {
-
+        prestamos.remove(prestamo);
     }
 
     public VentaJuego comprarJuego(JuegoMesa juego, String codigoDescuento, double puntosUsados) {
-        return null;
+        VentaJuego venta = new VentaJuego(LocalDateTime.now(), 0, 0, this);
+        venta.getJuegos().add(juego);
+        ventas.add(venta);
+        return venta;
     }
 
     public VentaCafeteria comprarCafeteria(List<ItemMenu> items, double propina, double puntosUsados) {
-        return null;
+        VentaCafeteria venta = new VentaCafeteria(LocalDateTime.now(), 0, 0, this, mesa, propina);
+        venta.getItems().addAll(items);
+        ventas.add(venta);
+        return venta;
     }
 
     public void agregarFavorito(JuegoMesa juego) {
-
+        if (!favoritos.contains(juego)) {
+            favoritos.add(juego);
+        }
     }
 
     public void eliminarFavorito(JuegoMesa juego) {
-
+        favoritos.remove(juego);
     }
 
     private void acumularPuntos(double puntos) {

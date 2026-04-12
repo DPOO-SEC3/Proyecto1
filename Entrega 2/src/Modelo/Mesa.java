@@ -18,6 +18,8 @@ public class Mesa {
 	public Mesa(int numeroMesa, int maximaDePersonas) {
 		this.numeroMesa = numeroMesa;
 		this.maximaDePersonas = maximaDePersonas;
+		this.prestamos = new ArrayList<>();
+		this.ventasCafeterias = new ArrayList<>();
 	}
 
 	public int getNumeroMesa() {
@@ -72,7 +74,7 @@ public class Mesa {
 	{
 		for (Prestamo prestamo: prestamos)
 		{
-			if(prestamo.getEjemplar().getJuegoMesa().getCategoria()=="Accion")
+			if(prestamo.getEjemplar().getJuegoMesa().getCategoria().equals("Accion"))
 			{
 				return true;
 			}

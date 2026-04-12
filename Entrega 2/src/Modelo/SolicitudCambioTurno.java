@@ -48,11 +48,11 @@ public class SolicitudCambioTurno {
         return estado.equalsIgnoreCase("pendiente");
     }
 
-    private void aprobar() {
+    public void aprobar() {
         this.estado = "aprobada";
     }
 
-    private void rechazar() {
+    public void rechazar() {
         this.estado = "rechazada";
     }
 }
