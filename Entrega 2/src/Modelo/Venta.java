@@ -1,4 +1,4 @@
-package modelo;
+package Modelo;
 import java.time.LocalDateTime;
 
 
@@ -11,7 +11,7 @@ public abstract class Venta {
 	private double descuentoAplicado;
 	private double puntosFidelidadGenerados;
 	private Persona comprador;
-	public Venta(LocalDateTime fechaHora, double descuentoAplicado, double puntosFidelidadGenerados) {
+	public Venta(LocalDateTime fechaHora, double descuentoAplicado, double puntosFidelidadGenerados, Persona comprador) {
 	
 		this.fechaHora = fechaHora;
 		this.descuentoAplicado = descuentoAplicado;

@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Punto de entrada de la aplicación DulcesnDados.
  * Por ahora solo inicializa todas las clases y persistencias en el orden correcto.
- * El menú de interacción se implementará en el Proyecto 2.
  */
 public class ConsolaCafeteria extends ConsolaBasica {
  

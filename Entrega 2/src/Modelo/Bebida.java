@@ -1,4 +1,4 @@
-package modelo;
+package Modelo;
 
 public class Bebida extends ItemMenu {
 	private boolean esAlcoholica;

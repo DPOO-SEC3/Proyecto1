@@ -1,9 +1,12 @@
-package modelo;
+package Modelo;
+import java.time.LocalDate;
 
 public class SugerenciaPlatillo {
 	private String descripcion;
 	private String estado;
 	private LocalDate fechaSugerencia;
+	private Empleado empleado;
+	private boolean estaPendiente;
 	
 	public SugerenciaPlatillo (String descripcion, String estado, LocalDate fechaSugerencia)
 	{
@@ -23,7 +26,7 @@ public class SugerenciaPlatillo {
 	public LocalDate getFechaSugerencia() {
 		return fechaSugerencia;
 	}
-	public empleado getEmpleado()
+	public Empleado getEmpleado()
 	{
 		return empleado;
 	}
@@ -31,14 +34,11 @@ public class SugerenciaPlatillo {
 	{
 		return estaPendiente;
 	}
-	private void aprobar()
-	{
-		this.estado=true;
-		return estado;
+	private void aprobar(){
+		this.estado="aprobada";
 	}
 	public void rechazar()
 	{
-		this.estado=false;
-		return estado;
+		this.estado="aprobada";
 	}
 }

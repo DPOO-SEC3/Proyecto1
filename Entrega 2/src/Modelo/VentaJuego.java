@@ -1,4 +1,4 @@
-package modelo;
+package Modelo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -19,22 +19,22 @@ public class VentaJuego extends Venta {
 	{
 		return juegos;
 	}
-	public double getIVA()
+	public double getIVA(double subtotal)
 	{
 		return (subtotal*IVA);
 	}
 	protected double calcularSubtotal()
 	{
 		this.subtotal=0;
-		for (JuegosMesa juego: JuegosMesa)
+		for (JuegoMesa juego: juegos)
 		{
-			this.subtotal=subtotal+getPrecioDeVenta(juego);
+			this.subtotal=subtotal+juego.getPrecioDeVenta();
 		}
 		return subtotal;
 	}
 	protected double calcularTotal()
 	{
-		this.total=subtotal+(getIVA(subtotal));
+		this.total=subtotal+(this.getIVA(subtotal));
 		return total;
 	}
 }

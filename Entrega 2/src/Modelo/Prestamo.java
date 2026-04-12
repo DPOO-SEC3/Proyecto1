@@ -1,10 +1,12 @@
-package modelo;
+package Modelo;
 import java.time.LocalDateTime;
 
 public class Prestamo {
 	private LocalDateTime fechaHoraInicio;
 	private LocalDateTime fechaHoraDevolucion;
 	private String estado;
+	private EjemplarJuego ejemplar;
+	private Mesa mesa;
 
 	public Prestamo(LocalDateTime fechaHoraInicio, LocalDateTime fechaHoraDevolucion, String estado) {
 		

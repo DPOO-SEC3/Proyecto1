@@ -1,4 +1,4 @@
-package modelo;
+package Modelo;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -72,9 +72,9 @@ public class Mesa {
 	
 	public boolean tieneJuegoAccion()
 	{
-		for (prestamos juego: Prestamo)
+		for (Prestamo prestamo: prestamos)
 		{
-			if(juego.getEjemplar().getCategoria()=="Accion")
+			if(prestamo.getEjemplar().getJuegoMesa().getCategoria()=="Accion")
 			{
 				return true;
 			}
@@ -109,7 +109,7 @@ public class Mesa {
 	
 	private void registrarPrestamo(Prestamo prestamo)
 	{
-		prestamo.add(prestamo);
+		prestamos.add(prestamo);
 	}
 	
 	private void registrarVentaCafeteria(VentaCafeteria venta)
