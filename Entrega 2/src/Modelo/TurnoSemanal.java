@@ -33,7 +33,7 @@ public class TurnoSemanal {
     }
 
     public boolean estaActivo() {
-    	return true;
+        return horaInicio != null && horaFin != null;
     }
 
     public boolean solapaCon(TurnoSemanal otro) {
