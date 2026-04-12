@@ -48,51 +48,78 @@ public class ConsolaCafeteria extends ConsolaBasica {
     // ---------------------------------------------------------------
     private void iniciar() {
         System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
- 
-        // 1. Juegos e inventarios (no dependen de nada)
+
+        // 1. Juegos e inventarios
         cargarJuegosEInventarios();
- 
-        // 2. Usuarios (no dependen de juegos)
+
+        // 2. Usuarios
         cargarUsuarios();
- 
-        // 3. Turnos (dependen de usuarios para resolver referencias por login)
+
+        // 3. Turnos
         cargarTurnos();
- 
-        // Si no habia datos previos, cargamos ejemplos y guardamos
+
+        // Si no había datos previos
         if (todosLosJuegos.isEmpty() && usuarios.isEmpty()) {
             System.out.println("[INFO] Sin datos previos. Cargando datos de ejemplo...");
             cargarDatosEjemplo();
             guardarTodo();
         }
-        Mesa mesaEjemplo1= new Mesa(1,4);
-        Mesa mesaEjemplo2= new Mesa(2,4);
-        Mesa mesaEjemplo3= new Mesa(3,4);
 
-        Cliente clienteEjem= (Cliente) usuarios.get(0);
-        Mesero meseroEjem= (Mesero) usuarios.get(1);
-        Cocinero cocineroEjem= (Cocinero) usuarios.get(2);
-        Administrador adminEjem= (Administrador) usuarios.get(3);
-        Mesero meseroEjem2= (Mesero) usuarios.get(4);
+        // Buscar usuarios por tipo
+        Cliente clienteEjem = null;
+        Mesero meseroEjem = null;
+        Cocinero cocineroEjem = null;
+        Administrador adminEjem = null;
+
+        for (Persona p : usuarios) {
+            if (p instanceof Cliente && clienteEjem == null) {
+                clienteEjem = (Cliente) p;
+            } else if (p instanceof Mesero && meseroEjem == null) {
+                meseroEjem = (Mesero) p;
+            } else if (p instanceof Cocinero && cocineroEjem == null) {
+                cocineroEjem = (Cocinero) p;
+            } else if (p instanceof Administrador && adminEjem == null) {
+                adminEjem = (Administrador) p;
+            }
+        }
+
+        // Validación para evitar errores
+        if (clienteEjem == null || meseroEjem == null || cocineroEjem == null || adminEjem == null) {
+            System.out.println("[WARN] No hay suficientes usuarios para pruebas");
+            return;
+        }
+
+        // -----------------------------
+        // Pruebas
+        // -----------------------------
+        Mesa mesaEjemplo1 = new Mesa(1, 4);
+        Mesa mesaEjemplo2 = new Mesa(2, 4);
+        Mesa mesaEjemplo3 = new Mesa(3, 4);
 
         clienteEjem.ocuparMesa(mesaEjemplo1, 4, true, true);
         clienteEjem.ocuparMesa(mesaEjemplo2, 1, false, false);
         clienteEjem.ocuparMesa(mesaEjemplo3, 2, false, true);
 
-        clienteEjem.solicitarPrestamo(inventarioPrestamo.getEjemplares().get(0));
+        if (!inventarioPrestamo.getEjemplares().isEmpty()) {
+            clienteEjem.solicitarPrestamo(inventarioPrestamo.getEjemplares().get(0));
+        }
         clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
 
         clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
         clienteEjem.comprarJuego(todosLosJuegos.get(1), "", 0);
 
-        List<ItemMenu> items= new ArrayList<>();
-        ItemMenu item1= new Bebida(false,"caliente","Cafe","cafe para tomar", 5000);
+        List<ItemMenu> items = new ArrayList<>();
+        ItemMenu item1 = new Bebida(false, "caliente", "Cafe", "cafe para tomar", 5000);
         List<String> lista = new ArrayList<>(Arrays.asList("gluten", "leche", "arandanos"));
-        ItemMenu item2= new Pasteleria("Torta", "torta de chocolate", 10000, lista);
+        ItemMenu item2 = new Pasteleria("Torta", "torta de chocolate", 10000, lista);
+
+        items.add(item1);
+        items.add(item2);
+
         clienteEjem.comprarCafeteria(items, 2000, 0);
+
         guardarTodo();
-        
-        meseroEjem.solicitarCambioTurno("cambio","estudios",meseroEjem2);
- 
+
         System.out.println("\n=== Sistema listo ===");
         System.out.println("Juegos:       " + todosLosJuegos.size());
         System.out.println("Usuarios:     " + usuarios.size());
