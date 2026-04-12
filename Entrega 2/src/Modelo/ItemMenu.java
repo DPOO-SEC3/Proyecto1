@@ -7,7 +7,6 @@ public abstract class ItemMenu {
 	private double precioBase;
 	
 	public ItemMenu(String nombre, String descripcion, double precioBase) {
-		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precioBase = precioBase;

@@ -1,0 +1,14 @@
+{"turnos": [
+    {
+        "horaFin": "16:00",
+        "empleadoLogin": "luis",
+        "dia": "Lunes",
+        "horaInicio": "08:00"
+    },
+    {
+        "horaFin": "16:00",
+        "empleadoLogin": "marta",
+        "dia": "Lunes",
+        "horaInicio": "08:00"
+    }
+]}

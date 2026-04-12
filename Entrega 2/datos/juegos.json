@@ -1,0 +1,61 @@
+[
+  {
+    "minimoJugadores": 3,
+    "ejemplares": [
+      {
+        "estado": "Nuevo",
+        "desaparecido": false,
+        "disponible": true,
+        "numeroDeVecesPrestado": 0
+      },
+      {
+        "estado": "Bueno",
+        "desaparecido": false,
+        "disponible": true,
+        "numeroDeVecesPrestado": 0
+      }
+    ],
+    "restriccionEdad": "apto para todos",
+    "precioDeVenta": 120000,
+    "categoria": "Tablero",
+    "esDificil": true,
+    "anioPublicacion": 1995,
+    "nombre": "Catan",
+    "maximoJugadores": 4,
+    "empresaFabricante": "Kosmos"
+  },
+  {
+    "minimoJugadores": 2,
+    "ejemplares": [{
+      "estado": "Nuevo",
+      "desaparecido": false,
+      "disponible": true,
+      "numeroDeVecesPrestado": 0
+    }],
+    "restriccionEdad": "apto para todos",
+    "precioDeVenta": 25000,
+    "categoria": "Cartas",
+    "esDificil": false,
+    "anioPublicacion": 1971,
+    "nombre": "Uno",
+    "maximoJugadores": 10,
+    "empresaFabricante": "Mattel"
+  },
+  {
+    "minimoJugadores": 2,
+    "ejemplares": [{
+      "estado": "Bueno",
+      "desaparecido": false,
+      "disponible": true,
+      "numeroDeVecesPrestado": 0
+    }],
+    "restriccionEdad": "exclusivo adultos",
+    "precioDeVenta": 45000,
+    "categoria": "Accion",
+    "esDificil": false,
+    "anioPublicacion": 1966,
+    "nombre": "Twister",
+    "maximoJugadores": 6,
+    "empresaFabricante": "Hasbro"
+  }
+]

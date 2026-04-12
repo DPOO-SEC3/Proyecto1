@@ -9,6 +9,7 @@ import excepciones.PersistenciaException;
  
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
  
 /**
@@ -63,6 +64,34 @@ public class ConsolaCafeteria extends ConsolaBasica {
             cargarDatosEjemplo();
             guardarTodo();
         }
+        Mesa mesaEjemplo1= new Mesa(1,4);
+        Mesa mesaEjemplo2= new Mesa(2,4);
+        Mesa mesaEjemplo3= new Mesa(3,4);
+
+        Cliente clienteEjem= (Cliente) usuarios.get(0);
+        Mesero meseroEjem= (Mesero) usuarios.get(1);
+        Cocinero cocineroEjem= (Cocinero) usuarios.get(2);
+        Administrador adminEjem= (Administrador) usuarios.get(3);
+        Mesero meseroEjem2= (Mesero) usuarios.get(4);
+
+        clienteEjem.ocuparMesa(mesaEjemplo1, 4, true, true);
+        clienteEjem.ocuparMesa(mesaEjemplo2, 1, false, false);
+        clienteEjem.ocuparMesa(mesaEjemplo3, 2, false, true);
+
+        clienteEjem.solicitarPrestamo(inventarioPrestamo.getEjemplares().get(0));
+        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
+
+        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
+        clienteEjem.comprarJuego(todosLosJuegos.get(1), "", 0);
+
+        List<ItemMenu> items= new ArrayList<>();
+        ItemMenu item1= new Bebida(false,"caliente","Cafe","cafe para tomar", 5000);
+        List<String> lista = new ArrayList<>(Arrays.asList("gluten", "leche", "arandanos"));
+        ItemMenu item2= new Pasteleria("Torta", "torta de chocolate", 10000, lista);
+        clienteEjem.comprarCafeteria(items, 2000, 0);
+        guardarTodo();
+        
+        meseroEjem.solicitarCambioTurno("cambio","estudios",meseroEjem2);
  
         System.out.println("\n=== Sistema listo ===");
         System.out.println("Juegos:       " + todosLosJuegos.size());
@@ -174,8 +203,10 @@ public class ConsolaCafeteria extends ConsolaBasica {
         // Usuarios
         usuarios.add(new Cliente("Ana", "Garcia", "ana@mail.com", "1234", "ana", 0));
         Mesero mesero     = new Mesero("Luis", "Perez", "luis@mail.com", "1234", "luis");
+        Mesero mesero2     = new Mesero("Luisa", "Peralta", "luisa@mail.com", "1234", "luisa");
         Cocinero cocinero = new Cocinero("Marta", "Lopez", "marta@mail.com", "1234", "marta");
         usuarios.add(mesero);
+        usuarios.add(mesero2);
         usuarios.add(cocinero);
         usuarios.add(new Administrador("Carlos", "Diaz", "carlos@mail.com", "admin", "admin"));
  

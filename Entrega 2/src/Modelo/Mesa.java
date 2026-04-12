@@ -15,11 +15,9 @@ public class Mesa {
 	private List<VentaCafeteria> ventasCafeterias;
 	private Cliente cliente;
 	
-	public Mesa(int numeroMesa, int maximaDePersonas, boolean hayNiños, boolean hayMenosresDeEdad) {
+	public Mesa(int numeroMesa, int maximaDePersonas) {
 		this.numeroMesa = numeroMesa;
 		this.maximaDePersonas = maximaDePersonas;
-		this.hayNiños = hayNiños;
-		this.hayMenoresDeEdad = hayMenosresDeEdad;
 	}
 
 	public int getNumeroMesa() {
