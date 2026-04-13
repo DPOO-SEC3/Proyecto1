@@ -117,6 +117,8 @@ public class JuegoMesa {
         ejemplares.add(ejemplar);
     }
 
+    // Estos metodos de abajo fueron hechos para facilitar y hacer que funcione de mejor manera la persistencia de inventarios, esto fue por recomendación de la IA Gemini
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

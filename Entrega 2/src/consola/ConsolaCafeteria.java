@@ -13,8 +13,7 @@ import java.util.Arrays;
 import java.util.List;
  
 /**
- * Punto de entrada de la aplicación DulcesnDados.
- * Por ahora solo inicializa todas las clases y persistencias en el orden correcto.
+ * Punto de entrada de la aplicación, por ahora solo inicializa todas las clases y persistencias en el orden correcto, junto con ejemplos para probar funcionalidades basicas, no hay consolas ni tests robustos implementados para esta entrega.
  */
 public class ConsolaCafeteria extends ConsolaBasica {
  
@@ -43,9 +42,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
         new ConsolaCafeteria().iniciar();
     }
  
-    // ---------------------------------------------------------------
     // Inicialización en orden
-    // ---------------------------------------------------------------
     private void iniciar() {
         System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
  
@@ -100,10 +97,8 @@ public class ConsolaCafeteria extends ConsolaBasica {
         System.out.println("Inv.prestamo: " + inventarioPrestamo.getEjemplares().size() + " ejemplares");
         System.out.println("Inv.venta:    " + inventarioVenta.getJuegos().size() + " juegos");
     }
- 
-    // ---------------------------------------------------------------
+
     // Carga
-    // ---------------------------------------------------------------
     private void cargarJuegosEInventarios() {
         try {
             todosLosJuegos     = persistenciaJuegos.cargarJuegos();
@@ -137,10 +132,8 @@ public class ConsolaCafeteria extends ConsolaBasica {
             turnos = new ArrayList<>();
         }
     }
- 
-    // ---------------------------------------------------------------
+
     // Guardado
-    // ---------------------------------------------------------------
     private void guardarTodo() {
         try {
             persistenciaJuegos.guardarJuegos(todosLosJuegos);
@@ -168,9 +161,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
         }
     }
  
-    // ---------------------------------------------------------------
     // Datos de ejemplo (solo se usan si no hay archivos previos)
-    // ---------------------------------------------------------------
     private void cargarDatosEjemplo() {
         // Juegos
         JuegoMesa catan = new JuegoMesa("Catan", 1995, "Kosmos", "Tablero",
