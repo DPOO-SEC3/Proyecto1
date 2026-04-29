@@ -10,7 +10,7 @@ public class ConsolaCliente extends ConsolaBasica {
 		int opcionElegida= super.mostrarMenu("--------MENU DE CLIENTE--------", opciones);
 		return opcionElegida;
 	}
-	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles) {
+	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, Cliente cliente) {
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuCliente();
@@ -19,8 +19,13 @@ public class ConsolaCliente extends ConsolaBasica {
 					System.out.println("Funcionalidad de ocupar mesa aún no implementada.");
 					break;
 				case 2:
-					System.out.println("Funcionalidad de pedir juego prestado aún no implementada.");
-					break;
+					try {
+						ConsolaPrestamos consolaPrestamos = new ConsolaPrestamos();
+						consolaPrestamos.solicitarPrestamo(inventarioPrestamo, cliente.getMesa(), cliente);
+						
+					} catch (Exception e) {
+						System.out.println("Error al solicitar préstamo: " + e.getMessage());
+					}
 				case 3:
 					System.out.println("Funcionalidad de devolver juego aún no implementada.");
 					break;

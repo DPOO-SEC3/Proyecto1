@@ -7,12 +7,24 @@ public class Prestamo {
 	private String estado;
 	private EjemplarJuego ejemplar;
 	private Mesa mesa;
+	private InventarioPrestamo inventarioPrestamo;
 
-	public Prestamo(LocalDateTime fechaHoraInicio, LocalDateTime fechaHoraDevolucion, String estado) {
+	public Prestamo(InventarioPrestamo inventarioPrestamo,EjemplarJuego ejemplar, Mesa mesa) {
 		
-		this.fechaHoraInicio = fechaHoraInicio;
-		this.fechaHoraDevolucion = fechaHoraDevolucion;
-		this.estado = estado;
+		setFechaHoraInicio();
+		this.ejemplar = ejemplar;
+		this.mesa = mesa;
+		this.inventarioPrestamo=inventarioPrestamo;
+	}
+	public InventarioPrestamo getInventarioPrestamo()
+	{
+		return inventarioPrestamo;
+	}
+	public void setFechaHoraInicio() {
+		fechaHoraInicio=LocalDateTime.now();
+	}
+	public void setFechaHoraFinal() {
+		fechaHoraInicio=LocalDateTime.now();
 	}
 
 	public LocalDateTime getFechaHoraInicio() {
@@ -43,15 +55,20 @@ public class Prestamo {
 		}
 		return false;
 	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 	
 	private void devolver()
 	{
-		LocalDateTime ahora=LocalDateTime.now();
-		this.fechaHoraDevolucion=ahora;	
+		this.setEstado("terminado");
+		setFechaHoraFinal();
 	}
 	private void marcarDesaparecido()
 	{
 		this.estado="desaparecido";
+		this.ejemplar.marcarDesaparecido();
+		
 	}
 }
 

@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Iterator;
 
+import Modelo.EjemplarJuego;
+import Modelo.InventarioPrestamo;
+import Modelo.InventarioVenta;
+import Modelo.JuegoMesa;
+
 /**
  * Esta es una clase abstracta que implementa métodos útiles para todas las consolas de la aplicación.
  */
@@ -249,5 +254,44 @@ public abstract class ConsolaBasica
             return mostrarMenu( nombreMenu, opciones );
         }
     }
+    
+    
+    
+    // FUNCIONES PARA EL MODELO ESPECIFICO:
+    
+	public void mostrarCatalogoInventarioVenta(InventarioVenta inventarioVenta) {
+		System.out.println("Catálogo de juegos disponibles para venta:");
+		for (JuegoMesa juego : inventarioVenta.getJuegos()) {
+			mostrarDetallesJuego(juego);
+		}
+	}
+	public void mostrarCatalogoInventarioPrestamo(InventarioPrestamo inventarioPrestamo) {
+		System.out.println("Catálogo de juegos disponibles para préstamo:");
+		for (EjemplarJuego ejemplar : inventarioPrestamo.getEjemplares()) {
+			if (ejemplar.isDisponible()) {
+				System.out.println("- " + ejemplar.getJuegoMesa().getNombre() + " (ID: " + ejemplar.getID() + ")");
+			}
+		}
+	}
+	
+	public void mostrarDetallesJuego(JuegoMesa juego) {
+		System.out.println("Detalles del juego:");
+		System.out.println("Nombre: " + juego.getNombre());
+		System.out.println("Año de publicación: " + juego.getAnioPublicacion());
+		System.out.println("Empresa fabricante: " + juego.getEmpresaFabricante());
+		System.out.println("Categoría: " + juego.getCategoria());
+		System.out.println("Número mínimo de jugadores: " + juego.getMinimoJugadores());
+		System.out.println("Número máximo de jugadores: " + juego.getMaximoJugadores());
+		System.out.println("Restricción de edad: " + juego.getRestriccionEdad());
+		System.out.println("¿Es difícil? " + (juego.esDificil() ? "Sí" : "No"));
+		System.out.println("Precio de venta: $" + juego.getPrecioDeVenta());
+	}
+	
+	public void mostrarEjemplaresJuego(JuegoMesa juego) {
+		System.out.println("Ejemplares del juego: " + juego.getNombre());
+		for (EjemplarJuego ejemplar : juego.getEjemplares()) {
+			System.out.println("- Estado: " + ejemplar.getEstado() + ", Disponible: " + (ejemplar.isDisponible() ? "Sí" : "No") + ", Veces prestado: " + ejemplar.getNumeroDeVecesPrestado() + ", Desaparecido: " + (ejemplar.isDesaparecido() ? "Sí" : "No"));
+		}
+	}
 
 }

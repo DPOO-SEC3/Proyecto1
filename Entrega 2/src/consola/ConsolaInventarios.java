@@ -184,18 +184,5 @@ public class ConsolaInventarios extends ConsolaBasica {
 			return;
 		}
 	}
-		
-	public void mostrarEjemplaresJuego(JuegoMesa juego) {
-		System.out.println("Ejemplares del juego: " + juego.getNombre());
-		for (EjemplarJuego ejemplar : juego.getEjemplares()) {
-			System.out.println("- Estado: " + ejemplar.getEstado() + ", Disponible: " + (ejemplar.isDisponible() ? "Sí" : "No") + ", Veces prestado: " + ejemplar.getNumeroDeVecesPrestado() + ", Desaparecido: " + (ejemplar.isDesaparecido() ? "Sí" : "No"));
-		}
-	}
-	
-	
-	
-
-
-	
 
 }

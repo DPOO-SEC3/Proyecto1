@@ -72,8 +72,8 @@ public class Cocinero extends Empleado {
     }
 
     @Override
-    public Prestamo solicitarPrestamo(EjemplarJuego ejemplar) {
-        Prestamo p = new Prestamo(LocalDateTime.now(), null, "activo");
+    public Prestamo solicitarPrestamo(InventarioPrestamo inventarioPrestamo,EjemplarJuego ejemplar, Mesa mesa) {
+        Prestamo p = new Prestamo(inventarioPrestamo,ejemplar,mesa);
         prestamos.add(p);
         return p;
     }
@@ -107,5 +107,14 @@ public class Cocinero extends Empleado {
     @Override
     public void eliminarFavorito(JuegoMesa juego) {
         favoritos.remove(juego);
+    }
+    @Override
+    public Prestamo buscarPrestamoActivo(String nombreEjemplar) {
+    	for (Prestamo prestamo : prestamos) {
+			if (prestamo.estaActivo() && prestamo.getEjemplar().getJuegoMesa().getNombre().equals(nombreEjemplar)) {
+				return prestamo;
+			}
+		}
+		return null; 
     }
 }

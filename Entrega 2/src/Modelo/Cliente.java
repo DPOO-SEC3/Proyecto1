@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Persona {
+public class Cliente extends Persona implements ISolicitarPrestamo {
 
     private double puntosFidelidadAcumulados;
     private Mesa mesa;
@@ -44,15 +44,29 @@ public class Cliente extends Persona {
     public void liberarMesa() {
         this.mesa = null;
     }
+    
 
-    public Prestamo solicitarPrestamo(EjemplarJuego ejemplar) {
-        Prestamo p = new Prestamo(LocalDateTime.now(), null, "activo");
+   @Override
+    public Prestamo solicitarPrestamo(InventarioPrestamo inventarioPrestamo,EjemplarJuego ejemplar, Mesa mesa) {
+        Prestamo p = new Prestamo(inventarioPrestamo,ejemplar,mesa);
         prestamos.add(p);
+        inventarioPrestamo.removerEjemplar(ejemplar);
         return p;
     }
+    
+    
 
     public void devolverJuego(Prestamo prestamo) {
-        prestamos.remove(prestamo);
+    
+        try {
+        	InventarioPrestamo inventario = prestamo.getInventarioPrestamo();
+        	inventario.agregarEjemplar(prestamo.getEjemplar());
+        	prestamo.setFechaHoraFinal();
+        	prestamo.setEstado("Devuelto");
+        } catch (Exception e) {
+			System.out.println("Error al devolver el juego: " + e.getMessage());
+        }
+        
     }
 
     public VentaJuego comprarJuego(JuegoMesa juego, String codigoDescuento, double puntosUsados) {
@@ -73,6 +87,15 @@ public class Cliente extends Persona {
         if (!favoritos.contains(juego)) {
             favoritos.add(juego);
         }
+    }
+    
+    public Prestamo buscarPrestamoActivo(String nombreEjemplar) {
+    	for (Prestamo prestamo : prestamos) {
+			if (prestamo.estaActivo() && prestamo.getEjemplar().getJuegoMesa().getNombre().equals(nombreEjemplar)) {
+				return prestamo;
+			}
+		}
+		return null; 
     }
 
     public void eliminarFavorito(JuegoMesa juego) {
