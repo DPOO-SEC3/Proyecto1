@@ -33,7 +33,7 @@ public class InventarioVenta {
         throw new JuegoNoExistenteException(nombre);
     }
 
-    protected boolean hayStock(JuegoMesa juego) {
+    public boolean hayStock(JuegoMesa juego) {
         return juegos.contains(juego);
     }
 

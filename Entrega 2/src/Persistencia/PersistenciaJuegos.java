@@ -179,6 +179,7 @@ public class PersistenciaJuegos {
         obj.put("disponible",            ejemplar.isDisponible());
         obj.put("desaparecido",          ejemplar.isDesaparecido());
         obj.put("numeroDeVecesPrestado", ejemplar.getNumeroDeVecesPrestado());
+        obj.put("ID", 				  ejemplar.getID());
         return obj;
     }
 
@@ -204,6 +205,7 @@ public class PersistenciaJuegos {
             );
             ejemplar.setDisponible(jsonEjemplar.getBoolean("disponible"));
             ejemplar.setNumeroDeVecesPrestado(jsonEjemplar.getInt("numeroDeVecesPrestado"));
+            ejemplar.setID();
             if (jsonEjemplar.optBoolean("desaparecido", false)) {
                 ejemplar.marcarDesaparecido();
             }

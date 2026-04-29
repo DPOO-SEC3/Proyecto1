@@ -11,6 +11,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import consola.ConsolaInventarios;
  
 /**
  * Punto de entrada de la aplicación, por ahora solo inicializa todas las clases y persistencias en el orden correcto, junto con ejemplos para probar funcionalidades basicas, no hay consolas ni tests robustos implementados para esta entrega.
@@ -26,6 +28,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private InventarioVenta    inventarioVenta;
     private List<Persona>      usuarios;
     private List<TurnoSemanal> turnos;
+    private List<Mesa> mesasDisponibles = new ArrayList<>();
  
     // Persistencias
     private PersistenciaJuegos   persistenciaJuegos;
@@ -41,89 +44,138 @@ public class ConsolaCafeteria extends ConsolaBasica {
     public static void main(String[] args) {
         new ConsolaCafeteria().iniciar();
     }
+    private void iniciar() {
+    	System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
+		cargarJuegosEInventarios();
+		cargarUsuarios();
+		cargarTurnos();
+		inicializarMesas(10);
+		String login = super.pedirCadenaAlUsuario("Ingrese su nombre de usuario para iniciar sesión");
+		String constrasena = super.pedirCadenaAlUsuario("Ingrese su contraseña para iniciar sesión");
+		int indexUsuarioEncontrado= -1;
+		if(usuarios.isEmpty()) {
+			System.out.println("[WARN] No hay usuarios registrados. Por favor, contacte al administrador.");
+			return;
+		}else {
+			for(int i=0; i<usuarios.size(); i++) {
+				if(usuarios.get(i).getLogin().equalsIgnoreCase(login) && usuarios.get(i).getContrasena().equalsIgnoreCase(constrasena)) {
+					System.out.println("Bienvenido, " + usuarios.get(i).getNombre() + " " + usuarios.get(i).getApellido() + "!");
+					indexUsuarioEncontrado = i;
+					break;
+				}
+			}
+			if(indexUsuarioEncontrado == -1) {
+				System.out.println("[ERROR] Usuario o contraseña incorrectos. Por favor, intente nuevamente.");
+				return;
+			}else {
+				if(usuarios.get(indexUsuarioEncontrado) instanceof Cliente) {
+					System.out.println("Has iniciado sesión como Cliente.");
+					}
+				else if(usuarios.get(indexUsuarioEncontrado) instanceof Mesero) {
+					System.out.println("Has iniciado sesión como Mesero.");
+				}
+				else if(usuarios.get(indexUsuarioEncontrado) instanceof Cocinero) {
+					System.out.println("Has iniciado sesión como Cocinero.");
+				}
+				else if(usuarios.get(indexUsuarioEncontrado) instanceof Administrador) {
+					System.out.println("Has iniciado sesión como Administrador.");
+					ConsolaAdministrador consolaAdmin = new ConsolaAdministrador();
+					consolaAdmin.iniciar(inventarioVenta,inventarioPrestamo,todosLosJuegos);
+				}
+			}
+		}
+		
+    }
+    private void inicializarMesas(int numeroMesas) { 
+    	for (int i = 1; i <= numeroMesas; i++) {
+    		int valorRandomCapacidadMesa= (int) (Math.random() * 5) + 3;
+			Mesa mesa = new Mesa(i, valorRandomCapacidadMesa);
+			mesasDisponibles.add(mesa);
+		}
+    }
  
     // Inicialización en orden
-    private void iniciar() {
-        System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
-
-        // 1. Juegos e inventarios
-        cargarJuegosEInventarios();
-
-        // 2. Usuarios
-        cargarUsuarios();
-
-        // 3. Turnos
-        cargarTurnos();
-
-        // Si no había datos previos
-        if (todosLosJuegos.isEmpty() && usuarios.isEmpty()) {
-            System.out.println("[INFO] Sin datos previos. Cargando datos de ejemplo...");
-            cargarDatosEjemplo();
-            guardarTodo();
-        }
-
-        // Buscar usuarios por tipo
-        Cliente clienteEjem = null;
-        Mesero meseroEjem = null;
-        Cocinero cocineroEjem = null;
-        Administrador adminEjem = null;
-
-        for (Persona p : usuarios) {
-            if (p instanceof Cliente && clienteEjem == null) {
-                clienteEjem = (Cliente) p;
-            } else if (p instanceof Mesero && meseroEjem == null) {
-                meseroEjem = (Mesero) p;
-            } else if (p instanceof Cocinero && cocineroEjem == null) {
-                cocineroEjem = (Cocinero) p;
-            } else if (p instanceof Administrador && adminEjem == null) {
-                adminEjem = (Administrador) p;
-            }
-        }
-
-        // Validación para evitar errores
-        if (clienteEjem == null || meseroEjem == null || cocineroEjem == null || adminEjem == null) {
-            System.out.println("[WARN] No hay suficientes usuarios para pruebas");
-            return;
-        }
-
-        // -----------------------------
-        // Pruebas
-        // -----------------------------
-        Mesa mesaEjemplo1 = new Mesa(1, 4);
-        Mesa mesaEjemplo2 = new Mesa(2, 4);
-        Mesa mesaEjemplo3 = new Mesa(3, 4);
-
-        clienteEjem.ocuparMesa(mesaEjemplo1, 4, true, true);
-        clienteEjem.ocuparMesa(mesaEjemplo2, 1, false, false);
-        clienteEjem.ocuparMesa(mesaEjemplo3, 2, false, true);
-
-        if (!inventarioPrestamo.getEjemplares().isEmpty()) {
-            clienteEjem.solicitarPrestamo(inventarioPrestamo.getEjemplares().get(0));
-        }
-        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
-
-        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
-        clienteEjem.comprarJuego(todosLosJuegos.get(1), "", 0);
-
-        List<ItemMenu> items = new ArrayList<>();
-        ItemMenu item1 = new Bebida(false, "caliente", "Cafe", "cafe para tomar", 5000);
-        List<String> lista = new ArrayList<>(Arrays.asList("gluten", "leche", "arandanos"));
-        ItemMenu item2 = new Pasteleria("Torta", "torta de chocolate", 10000, lista);
-
-        items.add(item1);
-        items.add(item2);
-
-        clienteEjem.comprarCafeteria(items, 2000, 0);
-
-        guardarTodo();
-
-        System.out.println("\n=== Sistema listo ===");
-        System.out.println("Juegos:       " + todosLosJuegos.size());
-        System.out.println("Usuarios:     " + usuarios.size());
-        System.out.println("Turnos:       " + turnos.size());
-        System.out.println("Inv.prestamo: " + inventarioPrestamo.getEjemplares().size() + " ejemplares");
-        System.out.println("Inv.venta:    " + inventarioVenta.getJuegos().size() + " juegos");
-    }
+//    private void iniciar() {
+//        System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
+//
+//        // 1. Juegos e inventarios
+//        cargarJuegosEInventarios();
+//
+//        // 2. Usuarios
+//        cargarUsuarios();
+//
+//        // 3. Turnos
+//        cargarTurnos();
+//
+//        // Si no había datos previos
+//        if (todosLosJuegos.isEmpty() && usuarios.isEmpty()) {
+//            System.out.println("[INFO] Sin datos previos. Cargando datos de ejemplo...");
+//            cargarDatosEjemplo();
+//            guardarTodo();
+//        }
+//
+//        // Buscar usuarios por tipo
+//        Cliente clienteEjem = null;
+//        Mesero meseroEjem = null;
+//        Cocinero cocineroEjem = null;
+//        Administrador adminEjem = null;
+//
+//        for (Persona p : usuarios) {
+//            if (p instanceof Cliente && clienteEjem == null) {
+//                clienteEjem = (Cliente) p;
+//            } else if (p instanceof Mesero && meseroEjem == null) {
+//                meseroEjem = (Mesero) p;
+//            } else if (p instanceof Cocinero && cocineroEjem == null) {
+//                cocineroEjem = (Cocinero) p;
+//            } else if (p instanceof Administrador && adminEjem == null) {
+//                adminEjem = (Administrador) p;
+//            }
+//        }
+//
+//        // Validación para evitar errores
+//        if (clienteEjem == null || meseroEjem == null || cocineroEjem == null || adminEjem == null) {
+//            System.out.println("[WARN] No hay suficientes usuarios para pruebas");
+//            return;
+//        }
+//
+//        // -----------------------------
+//        // Pruebas
+//        // -----------------------------
+//        Mesa mesaEjemplo1 = new Mesa(1, 4);
+//        Mesa mesaEjemplo2 = new Mesa(2, 4);
+//        Mesa mesaEjemplo3 = new Mesa(3, 4);
+//
+//        clienteEjem.ocuparMesa(mesaEjemplo1, 4, true, true);
+//        clienteEjem.ocuparMesa(mesaEjemplo2, 1, false, false);
+//        clienteEjem.ocuparMesa(mesaEjemplo3, 2, false, true);
+//
+//        if (!inventarioPrestamo.getEjemplares().isEmpty()) {
+//            clienteEjem.solicitarPrestamo(inventarioPrestamo.getEjemplares().get(0));
+//        }
+//        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
+//
+//        clienteEjem.comprarJuego(todosLosJuegos.get(0), "", 0);
+//        clienteEjem.comprarJuego(todosLosJuegos.get(1), "", 0);
+//
+//        List<ItemMenu> items = new ArrayList<>();
+//        ItemMenu item1 = new Bebida(false, "caliente", "Cafe", "cafe para tomar", 5000);
+//        List<String> lista = new ArrayList<>(Arrays.asList("gluten", "leche", "arandanos"));
+//        ItemMenu item2 = new Pasteleria("Torta", "torta de chocolate", 10000, lista);
+//
+//        items.add(item1);
+//        items.add(item2);
+//
+//        clienteEjem.comprarCafeteria(items, 2000, 0);
+//
+//        guardarTodo();
+//
+//        System.out.println("\n=== Sistema listo ===");
+//        System.out.println("Juegos:       " + todosLosJuegos.size());
+//        System.out.println("Usuarios:     " + usuarios.size());
+//        System.out.println("Turnos:       " + turnos.size());
+//        System.out.println("Inv.prestamo: " + inventarioPrestamo.getEjemplares().size() + " ejemplares");
+//        System.out.println("Inv.venta:    " + inventarioVenta.getJuegos().size() + " juegos");
+//    }
 
     // Carga
     private void cargarJuegosEInventarios() {

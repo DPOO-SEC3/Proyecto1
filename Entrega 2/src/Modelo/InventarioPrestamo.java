@@ -23,14 +23,23 @@ public class InventarioPrestamo {
     public List<EjemplarJuego> getEjemplares() {
         return ejemplares;
     }
+    
+    public EjemplarJuego buscarEjemplarPorID(String ID) throws JuegoNoDisponibleException {
+		for (EjemplarJuego e : ejemplares) {
+			if (e.getID().equalsIgnoreCase(ID)) {
+				return e;
+			}
+		}
+		throw new JuegoNoDisponibleException("ID: " + ID);
+	}
 
-    public EjemplarJuego buscarEjemplarDisponible(JuegoMesa juego) throws JuegoNoDisponibleException {
+    public EjemplarJuego buscarEjemplarDisponible(String nombreJuego) throws JuegoNoDisponibleException {
         for (EjemplarJuego e : ejemplares) {
-            if (e.getJuegoMesa().equals(juego) && e.isDisponible()) {
+            if (e.getJuegoMesa().getNombre().equals(nombreJuego) && e.isDisponible()) {
                 return e;
             }
         }
-        throw new JuegoNoDisponibleException(juego.getNombre());
+        throw new JuegoNoDisponibleException(nombreJuego);
     }
     public List<EjemplarJuego> getEjemplaresPorJuego(JuegoMesa juego) {
         List<EjemplarJuego> resultado = new ArrayList<>();

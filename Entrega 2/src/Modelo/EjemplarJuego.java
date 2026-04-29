@@ -1,8 +1,9 @@
 package Modelo;
 
 public class EjemplarJuego {
-
+	
     private String estado;
+    private String ID;
     private int numeroDeVecesPrestado;
     private boolean disponible;
     private JuegoMesa juegoMesa;
@@ -11,9 +12,25 @@ public class EjemplarJuego {
     public EjemplarJuego(String estado, JuegoMesa juegoMesa) {
         this.estado = estado;
         this.juegoMesa = juegoMesa;
+        this.ID= setID();
         this.numeroDeVecesPrestado = 0;
         this.disponible = true;
 		this.desaparecido = false;
+    }
+    
+    public String getID() {
+		return ID;
+	}
+    
+    public String setID() {
+    	JuegoMesa juego= this.juegoMesa;
+    	if (juego.getEjemplares().isEmpty()) {
+			String iD = juego.getNombre() + "-1";
+			return iD;
+		} else {
+			String iD = juego.getNombre() + "-" + (Integer.parseInt(juego.getEjemplares().get(juego.getEjemplares().size()-1).getID().split("-")[1]) + 1);
+			return iD;
+		}	
     }
 
     public String getEstado() {

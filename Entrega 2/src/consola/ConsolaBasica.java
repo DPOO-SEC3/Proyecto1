@@ -86,6 +86,65 @@ public abstract class ConsolaBasica
         }
         return valorResultado;
     }
+    
+    protected boolean pedirBooleanoAlUsuario( String mensaje )
+	{
+		boolean valorResultado = false;
+		boolean valorValido = false;
+		while( !valorValido )
+		{
+			try
+			{
+				System.out.print( mensaje + " (Responda 'true' o 'false') " );
+				BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ) );
+				String input = reader.readLine( ).toLowerCase( );
+				if( input.equals( "true" ) || input.equals( "t" ) )
+				{
+					valorResultado = true;
+					valorValido = true;
+				}
+				else if( input.equals( "false" ) || input.equals( "f" ) )
+				{
+					valorResultado = false;
+					valorValido = true;
+				}
+				else
+				{
+					System.out.println( "El valor digitado no es un booleano válido. Por favor, responda 'true' o 'false'." );
+				}
+			}
+			catch( IOException e )
+			{
+				System.out.println( "Error leyendo de la consola" );
+			}
+		}
+		return valorResultado;
+	}
+    
+    protected Double pedirDoubleAlUsuario( String mensaje )
+    {
+        Double valorResultado = Double.MIN_VALUE;
+        while( valorResultado == Double.MIN_VALUE )
+        {
+            try
+            {
+                System.out.print( mensaje + ": " );
+                BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ) );
+                String input = reader.readLine( );
+                Double numero = Double.parseDouble( input );
+                valorResultado = numero;
+            }
+            catch( NumberFormatException nfe )
+            {
+                System.out.println( "El valor digitado no es un entero" );
+            }
+            catch( IOException e )
+            {
+                System.out.println( "Error leyendo de la consola" );
+            }
+        }
+        return valorResultado;
+    }
 
     /**
      * Le pide al usuario que ingrese un número que puede tener cifras decimales

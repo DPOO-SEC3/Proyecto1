@@ -85,7 +85,7 @@ public class Mesa {
 	{
 		return cliente;
 	}
-	private void ocupar(int numeroDePersonas, boolean hayNiños, boolean hayMenoresDeEdad, Cliente cliente)
+	public void ocupar(int numeroDePersonas, boolean hayNiños, boolean hayMenoresDeEdad, Cliente cliente)
 	{
 		if (estaOcupada())
 		{
@@ -97,7 +97,7 @@ public class Mesa {
 		this.cliente=cliente;
 	}
 	
-	private void liberar()
+	public void liberar()
 	{
 		if (ventasCafeterias==null && prestamos==null)
 		{
@@ -107,12 +107,12 @@ public class Mesa {
 		}
 	}
 	
-	private void registrarPrestamo(Prestamo prestamo)
+	public void registrarPrestamo(Prestamo prestamo)
 	{
 		prestamos.add(prestamo);
 	}
 	
-	private void registrarVentaCafeteria(VentaCafeteria venta)
+	public void registrarVentaCafeteria(VentaCafeteria venta)
 	{
 		ventasCafeterias.add(venta);
 	}
