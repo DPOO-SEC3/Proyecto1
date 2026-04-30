@@ -20,6 +20,23 @@ public class Mesa {
 		this.maximaDePersonas = maximaDePersonas;
 		this.prestamos = new ArrayList<>();
 		this.ventasCafeterias = new ArrayList<>();
+		this.cliente = cliente;
+	}
+	public void setNumeroPersonas(int numeroDePersonas)
+	{
+		this.numeroDePersonas=numeroDePersonas;
+	}
+	public void setHayNiños(boolean hayNiños)
+	{
+		this.hayNiños=hayNiños;
+	}
+	public void setHayMenoresDeEdad(boolean hayMenoresDeEdad)
+	{
+		this.hayMenoresDeEdad=hayMenoresDeEdad;
+	}
+	public void setClientes(Cliente cliente)
+	{
+		this.cliente=cliente;
 	}
 
 	public int getNumeroMesa() {
@@ -85,16 +102,16 @@ public class Mesa {
 	{
 		return cliente;
 	}
-	public void ocupar(int numeroDePersonas, boolean hayNiños, boolean hayMenoresDeEdad, Cliente cliente)
+	public void ocupar(int numeroDePersonas, boolean hayNiños, boolean hayMenoresDeEdad, Cliente clientes)
 	{
 		if (estaOcupada())
 		{
 			liberar();
 		}
-		this.numeroDePersonas=numeroDePersonas;
-		this.hayNiños=hayNiños;
-		this.hayMenoresDeEdad=hayMenoresDeEdad;
-		this.cliente=cliente;
+		setNumeroPersonas(numeroDePersonas);
+		setHayNiños(hayNiños);
+		setHayMenoresDeEdad(hayMenoresDeEdad);
+		setClientes(cliente);
 	}
 	
 	public void liberar()
@@ -104,6 +121,7 @@ public class Mesa {
 			this.numeroDePersonas=0;
 			this.hayMenoresDeEdad=false;
 			this.hayNiños=false;
+			this.cliente = null;
 		}
 	}
 	

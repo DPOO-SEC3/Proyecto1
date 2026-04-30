@@ -28,7 +28,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private InventarioVenta    inventarioVenta;
     private List<Persona>      usuarios;
     private List<TurnoSemanal> turnos;
-    private List<Mesa> mesasDisponibles = new ArrayList<>();
+    private List<Mesa> mesasDisponibles = new ArrayList<Mesa>();
  
     // Persistencias
     private PersistenciaJuegos   persistenciaJuegos;
@@ -70,6 +70,8 @@ public class ConsolaCafeteria extends ConsolaBasica {
 			}else {
 				if(usuarios.get(indexUsuarioEncontrado) instanceof Cliente) {
 					System.out.println("Has iniciado sesión como Cliente.");
+					ConsolaCliente consolaCliente = new ConsolaCliente();
+					consolaCliente.iniciar(inventarioVenta,inventarioPrestamo,todosLosJuegos,(Cliente) usuarios.get(indexUsuarioEncontrado),mesasDisponibles);
 					}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Mesero) {
 					System.out.println("Has iniciado sesión como Mesero.");

@@ -39,10 +39,12 @@ public class Cliente extends Persona implements ISolicitarPrestamo {
 
     public void ocuparMesa(Mesa mesa, int numPersonas, boolean hayNinos, boolean hayMenores) {
         this.mesa = mesa;
+        mesa.ocupar(numPersonas, hayNinos, hayMenores, this);
     }
 
     public void liberarMesa() {
         this.mesa = null;
+        mesa.liberar();
     }
     
 
