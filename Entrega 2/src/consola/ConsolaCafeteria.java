@@ -26,6 +26,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private List<JuegoMesa>    todosLosJuegos;
     private InventarioPrestamo inventarioPrestamo;
     private InventarioVenta    inventarioVenta;
+    private Administrador      administrador;
     private List<Persona>      usuarios;
     private List<TurnoSemanal> turnos;
     private List<Mesa> mesasDisponibles = new ArrayList<Mesa>();
@@ -82,7 +83,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Administrador) {
 					System.out.println("Has iniciado sesión como Administrador.");
 					ConsolaAdministrador consolaAdmin = new ConsolaAdministrador();
-					consolaAdmin.iniciar(inventarioVenta,inventarioPrestamo,todosLosJuegos);
+					consolaAdmin.iniciar(administrador, inventarioVenta,inventarioPrestamo,todosLosJuegos);
 				}
 			}
 		}

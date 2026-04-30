@@ -23,7 +23,17 @@ public class ConsolaAdministrador extends ConsolaBasica {
 		ConsolaInventarios consolaInventarios = new ConsolaInventarios();
 		consolaInventarios.iniciar( inventarioVenta, inventarioPrestamo, juegosDisponibles);
 	}
-	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles) {
+	private void gestionarSolicitudesCambio(Administrador admin) {
+	    ConsolaSolicitudes consolaSolicitudes = new ConsolaSolicitudes();
+	    consolaSolicitudes.iniciar(admin);
+	}
+
+	private void gestionarTurnos(Administrador admin) {
+	    ConsolaTurnos consolaTurnos = new ConsolaTurnos();
+	    consolaTurnos.iniciar(admin);
+	}	
+
+	public void iniciar(Administrador admin, InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles) {
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuAdministrador();
@@ -35,7 +45,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
 					System.out.println("Funcionalidad de gestión de sugerencias aún no implementada.");
 					break;
 				case 3:
-					System.out.println("Funcionalidad de gestión de solicitudes de cambio de turno aún no implementada.");
+					gestionarSolicitudesCambio(admin);
 					break;
 				case 4:
 					System.out.println("Funcionalidad de consulta de ventas aún no implementada.");
@@ -44,7 +54,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
 					System.out.println("Funcionalidad de consulta de historial de préstamos aún no implementada.");
 					break;
 				case 6:
-					System.out.println("Funcionalidad de gestión de turnos semanales aún no implementada.");
+					gestionarTurnos(admin);
 					break;
 				case 7:
 					System.out.println("Funcionalidad de gestión de items del menú aún no implementada.");
