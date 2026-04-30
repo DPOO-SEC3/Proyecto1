@@ -2,7 +2,7 @@ package Modelo;
 
 import java.util.List;
 
-public abstract class Empleado extends Persona implements ISolicitarPrestamo {
+public abstract class Empleado extends Persona implements ISolicitarPrestamo,IComprar {
 
     public Empleado(String nombre, String apellido, String correoElectronico, String contrasena, String login) {
         super(nombre, apellido, correoElectronico, contrasena, login);
@@ -27,12 +27,6 @@ public abstract class Empleado extends Persona implements ISolicitarPrestamo {
     public abstract SugerenciaPlatillo sugerirPlatillo(String descripcion);
 
     public abstract Prestamo solicitarPrestamo(InventarioPrestamo inventarioPrestamo,EjemplarJuego ejemplar, Mesa mesa);
-
-    public abstract void devolverJuego(Prestamo prestamo);
-
-    public abstract VentaJuego comprarJuego(JuegoMesa juego, double descuento, double puntosUsados);
-
-    public abstract VentaCafeteria comprarCafeteria(List<ItemMenu> items, double propina, double puntosUsados);
 
     public abstract void agregarFavorito(JuegoMesa juego);
 

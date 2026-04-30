@@ -50,6 +50,40 @@ public class ConsolaCafeteria extends ConsolaBasica {
 		cargarUsuarios();
 		cargarTurnos();
 		inicializarMesas(10);
+		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
+		do {
+			switch (inicio) {
+			case 1:
+				iniciarSesion();
+				break;
+			case 2:
+				registrarUsuario();
+				break;
+			case 3:
+				System.out.println("Saliendo del sistema. ¡Hasta luego!");
+				return;
+			default:
+				System.out.println("Opción no válida. Por favor, elija una opción del menú.");
+			}
+		} while (inicio != 3);
+	}
+    
+    private void registrarUsuario() {
+    	
+    	String nombre = super.pedirCadenaAlUsuario("Ingrese su nombre:");
+    	String apellido = super.pedirCadenaAlUsuario("Ingrese su apellido:");
+    	String email = super.pedirCadenaAlUsuario("Ingrese su correo electrónico:");
+    	String contrasena = super.pedirCadenaAlUsuario("Ingrese su contraseña:");
+    	String login = super.pedirCadenaAlUsuario("Ingrese su nombre de usuario:");
+    	
+    	Cliente cliente = new Cliente(nombre,apellido,email,contrasena,login,0.0);
+    	
+    	usuarios.add(cliente);
+    	System.out.println("Usuario registrado exitosamente. Ahora puedes iniciar sesión con tu nuevo usuario.");
+    	
+    }
+	private void iniciarSesion() {
+		do {
 		String login = super.pedirCadenaAlUsuario("Ingrese su nombre de usuario para iniciar sesión");
 		String constrasena = super.pedirCadenaAlUsuario("Ingrese su contraseña para iniciar sesión");
 		int indexUsuarioEncontrado= -1;
@@ -86,6 +120,8 @@ public class ConsolaCafeteria extends ConsolaBasica {
 				}
 			}
 		}
+		
+		} while (true);
 		
     }
     private void inicializarMesas(int numeroMesas) { 

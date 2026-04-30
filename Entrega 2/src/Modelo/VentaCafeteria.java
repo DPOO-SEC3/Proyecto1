@@ -8,15 +8,20 @@ public class VentaCafeteria extends Venta {
 	private Mesa mesa;
 	private double impuestoConsumo;
 	private double propina;
+	private Persona comprador;
 	
-	public VentaCafeteria(LocalDateTime fechaHora, double descuentoAplicado,
-			double puntosFidelidadGenerados, Persona comprador, Mesa mesa, double propina)
+	public VentaCafeteria(LocalDateTime fechaHora, String codigoDescuento, Persona comprador, double propina)
 	{
-		super(fechaHora, descuentoAplicado, puntosFidelidadGenerados,comprador);
+		super(fechaHora, codigoDescuento,comprador);
 		this.impuestoConsumo=0.08;
 		this.propina=propina;
 		this.items=new ArrayList<>();
-		this.mesa=mesa;
+		this.comprador=comprador;
+	}
+	
+	public Persona getPersona()
+	{
+		return comprador;
 	}
 	public List<ItemMenu> getItems()
 	{

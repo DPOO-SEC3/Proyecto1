@@ -1,5 +1,6 @@
 package Modelo;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 
 
@@ -7,18 +8,17 @@ public abstract class Venta {
 	
 	private LocalDateTime fechaHora;
 	protected double subtotal;
-	protected double total;
+	protected Double total;
 	private double descuentoAplicado;
 	private double puntosFidelidadGenerados;
 	private Persona comprador;
-	public Venta(LocalDateTime fechaHora, double descuentoAplicado, double puntosFidelidadGenerados, Persona comprador) {
+	public Venta(LocalDateTime fechaHora, String codigoDescuento, Persona comprador) {
 	
 		this.fechaHora = fechaHora;
-		this.descuentoAplicado = descuentoAplicado;
-		this.puntosFidelidadGenerados = puntosFidelidadGenerados;
 		this.subtotal = 0;
-		this.total = 0;
+		this.total = 0.0;
 		this.comprador = comprador;
+		calcularPuntosFidelidadGenerados();
 	}
 	public LocalDateTime getFechaHora() {
 		return fechaHora;
@@ -35,6 +35,20 @@ public abstract class Venta {
 	public Persona getComprador()
 	{
 		return comprador;
+	}
+	public void calcularPuntosFidelidadGenerados() {
+		this.puntosFidelidadGenerados = total.intValue() * 0.01;
+	}
+	public int getPuntosFidelidadRedimibles() {
+		return (int) puntosFidelidadGenerados;
+	}
+	
+	public double calcularDescuento(String codigoDescuento, HashMap<String, Double> codigosDescuento) {
+		if (codigosDescuento.containsKey(codigoDescuento)) {
+			this.descuentoAplicado = codigosDescuento.get(codigoDescuento);
+			return codigosDescuento.get(codigoDescuento);
+		}
+		return 0;
 	}
 	
 

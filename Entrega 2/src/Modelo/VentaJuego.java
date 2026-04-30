@@ -9,11 +9,13 @@ import Modelo.Venta;
 public class VentaJuego extends Venta {
 	private double IVA;
 	private List<JuegoMesa> juegos;
+	private InventarioVenta inventarioVentaJuego;
+	private Persona comprador;
 	
-	public VentaJuego(LocalDateTime fechaHora, double descuentoAplicado, double puntosFidelidadGenerados, Persona comprador)
+	public VentaJuego(List<JuegoMesa> juegos,LocalDateTime fechaHora, String codigoDescuento, Persona comprador, InventarioVenta inventarioVentaJuego)
 	{
-		super (fechaHora, descuentoAplicado, puntosFidelidadGenerados, comprador);
-		this.juegos=new ArrayList<>();
+		super (fechaHora, codigoDescuento, comprador);
+		this.juegos=juegos;
 		this.IVA=0.19;
 	}
 	public List<JuegoMesa> getJuegos()
