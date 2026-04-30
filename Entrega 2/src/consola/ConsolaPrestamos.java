@@ -13,7 +13,7 @@ public class ConsolaPrestamos extends ConsolaBasica {
 		int opcionElegida;
 		do {
 			String[] opciones = {"Solicitar nuevo préstamo", "Devolver juego", "Ver catalogo prestamos", "Volver al menú principal"};
-			opcionElegida = super.mostrarMenu("GESTIÓN DE PRÉSTAMOS", opciones);
+			opcionElegida = super.mostrarMenu("PRÉSTAMOS", opciones);
 			switch (opcionElegida) {
 				case 1:
 					System.out.println("Funcionalidad de registrar nuevo préstamo aún no implementada.");

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Persona implements ISolicitarPrestamo {
+public class Cliente extends Persona implements ISolicitarPrestamo, IComprar {
 
     private double puntosFidelidadAcumulados;
     private Mesa mesa;
@@ -58,7 +58,8 @@ public class Cliente extends Persona implements ISolicitarPrestamo {
     
     
 
-    public void devolverJuego(Prestamo prestamo) {
+   @Override 
+   public void devolverJuego(Prestamo prestamo) {
     
         try {
         	InventarioPrestamo inventario = prestamo.getInventarioPrestamo();
@@ -70,16 +71,21 @@ public class Cliente extends Persona implements ISolicitarPrestamo {
         }
         
     }
+   
 
-    public VentaJuego comprarJuego(JuegoMesa juego, String codigoDescuento, double puntosUsados) {
-        VentaJuego venta = new VentaJuego(LocalDateTime.now(), 0, 0, this);
-        venta.getJuegos().add(juego);
+   @Override 
+   public VentaJuego comprarJuegos(List<JuegoMesa> juegos, String codigoDescuento, InventarioVenta inventarioVenta) {
+        VentaJuego venta = new VentaJuego(juegos,LocalDateTime.now(),codigoDescuento, this,inventarioVenta);
         ventas.add(venta);
+        for(JuegoMesa juego : juegos) {
+			 inventarioVenta.removerJuego(juego);
+		 }
         return venta;
     }
 
-    public VentaCafeteria comprarCafeteria(List<ItemMenu> items, double propina, double puntosUsados) {
-        VentaCafeteria venta = new VentaCafeteria(LocalDateTime.now(), 0, 0, this, mesa, propina);
+    @Override
+    public VentaCafeteria comprarCafeteria(List<ItemMenu> items,String codigoDescuento, double propina) {
+        VentaCafeteria venta = new VentaCafeteria(LocalDateTime.now(),codigoDescuento, this, propina);
         venta.getItems().addAll(items);
         ventas.add(venta);
         return venta;

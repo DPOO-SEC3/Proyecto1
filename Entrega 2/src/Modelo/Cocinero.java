@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
-public class Cocinero extends Empleado {
+public class Cocinero extends Empleado{
 
     private TurnoSemanal turno;
     private List<SolicitudCambioTurno> solicitudes;
@@ -83,21 +83,23 @@ public class Cocinero extends Empleado {
         prestamos.remove(prestamo);
     }
 
-    @Override
-    public VentaJuego comprarJuego(JuegoMesa juego, double descuento, double puntosUsados) {
-        VentaJuego v = new VentaJuego(LocalDateTime.now(), descuento, 0, this);
-        v.getJuegos().add(juego);
-        ventas.add(v);
-        return v;
-    }
+    @Override 
+    public VentaJuego comprarJuegos(List<JuegoMesa> juegos, String codigoDescuento, InventarioVenta inventarioVenta) {
+         VentaJuego venta = new VentaJuego(juegos,LocalDateTime.now(),codigoDescuento, this,inventarioVenta);
+         ventas.add(venta);
+         for(JuegoMesa juego : juegos) {
+ 			 inventarioVenta.removerJuego(juego);
+ 		 }
+         return venta;
+     }
 
-    @Override
-    public VentaCafeteria comprarCafeteria(List<ItemMenu> items, double propina, double puntosUsados) {
-        VentaCafeteria v = new VentaCafeteria(LocalDateTime.now(), 0, 0, this, null, propina);
-        v.getItems().addAll(items);
-        ventas.add(v);
-        return v;
-    }
+     @Override
+     public VentaCafeteria comprarCafeteria(List<ItemMenu> items,String codigoDescuento, double propina) {
+         VentaCafeteria venta = new VentaCafeteria(LocalDateTime.now(),codigoDescuento, this, propina);
+         venta.getItems().addAll(items);
+         ventas.add(venta);
+         return venta;
+     }
 
     @Override
     public void agregarFavorito(JuegoMesa juego) {

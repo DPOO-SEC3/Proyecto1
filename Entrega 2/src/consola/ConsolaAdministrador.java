@@ -61,7 +61,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
 					break;
 				case 8:
 					System.out.println("Saliendo del menú de administrador. ¡Hasta luego!");
-					break;
+					return;
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
