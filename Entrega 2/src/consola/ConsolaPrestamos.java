@@ -4,22 +4,22 @@ import Modelo.*;
 public class ConsolaPrestamos extends ConsolaBasica {
 	
 	
-	public void iniciar(InventarioPrestamo inventarioPrestamo, Mesa mesa, Persona usuario) {
+	public<T extends Persona & ISolicitarPrestamo> void iniciar(InventarioPrestamo inventarioPrestamo, Mesa mesa, T usuario) {
 		System.out.println("Bienvenido a la gestión de préstamos. Aquí podrás ver todo lo relacionado a el proceso de préstamo de juegos de mesa.");
 		mostrarMenuPrestamos(inventarioPrestamo, mesa, usuario);
 	}
 	
-	public void mostrarMenuPrestamos(InventarioPrestamo inventarioPrestamo, Mesa mesa, Persona usuario) {
+	public<T extends Persona & ISolicitarPrestamo> void mostrarMenuPrestamos(InventarioPrestamo inventarioPrestamo, Mesa mesa, T usuario) {
 		int opcionElegida;
 		do {
 			String[] opciones = {"Solicitar nuevo préstamo", "Devolver juego", "Ver catalogo prestamos", "Volver al menú principal"};
 			opcionElegida = super.mostrarMenu("PRÉSTAMOS", opciones);
 			switch (opcionElegida) {
 				case 1:
-					System.out.println("Funcionalidad de registrar nuevo préstamo aún no implementada.");
+					solicitarPrestamo(inventarioPrestamo, mesa, usuario);
 					break;
 				case 2:
-					System.out.println("Funcionalidad de registrar devolución de juego aún no implementada.");
+					devolverJuego(usuario);
 					break;
 				case 3:
 					super.mostrarCatalogoInventarioPrestamo(inventarioPrestamo);

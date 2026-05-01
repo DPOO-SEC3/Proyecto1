@@ -8,16 +8,23 @@ public class Torneo {
 	private int numeroParticipantes;
 	private JuegoMesa juego;
 	private List<Persona> participantes;
+	private String diaSemana;
 	
 	
-	public Torneo(String nombre, int numeroParticipantes, JuegoMesa juego) {
+	public Torneo(String nombre, int numeroParticipantes, JuegoMesa juego, String diaSemana) {
 		this.nombre = nombre;
 		this.numeroParticipantes = numeroParticipantes;
 		this.juego = juego;
 		this.participantes= null;
+		this.diaSemana = diaSemana;
 	}
 	
-	
+	public String getDiaSemana() {
+		return diaSemana;
+	}
+	public void setDiaSemana(String diaSemana) {
+		this.diaSemana = diaSemana;
+	}
 	public String getNombre() {
 		return nombre;
 	}

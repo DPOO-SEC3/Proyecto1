@@ -6,7 +6,7 @@ import Modelo.*;
 public class ConsolaCliente extends ConsolaBasica {
 	
 	private int mostrarMenuCliente() {
-		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego","Comprar item cafeteria","Gestionar Juegos favoritos","Salir"};
+		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego","Comprar item cafeteria","Gestionar Juegos favoritos","Desocupar Mesa","Salir"};
 		int opcionElegida= super.mostrarMenu("--------MENU DE CLIENTE--------", opciones);
 		return opcionElegida;
 	}
@@ -21,7 +21,7 @@ public class ConsolaCliente extends ConsolaBasica {
 				case 2:
 					try {
 						ConsolaPrestamos consolaPrestamos = new ConsolaPrestamos();
-						consolaPrestamos.solicitarPrestamo(inventarioPrestamo, cliente.getMesa(), cliente);	
+						consolaPrestamos.mostrarMenuPrestamos(inventarioPrestamo, cliente.getMesa(), cliente);
 					} catch (Exception e) {
 						System.out.println("Error al solicitar préstamo: " + e.getMessage());
 					}
@@ -32,7 +32,8 @@ public class ConsolaCliente extends ConsolaBasica {
 					System.out.println("Funcionalidad de comprar item cafetería aún no implementada.");
 					break;
 				case 5:
-					System.out.println("Funcionalidad de gestionar juegos favoritos aún no implementada.");
+					ConsolaJuegosFavoritos consolaJuegosFavoritos = new ConsolaJuegosFavoritos();
+					consolaJuegosFavoritos.mostrarMenuJuegosFavoritos(cliente, juegosDisponibles);
 					break;
 				case 6:
 					DesocuparMesa(cliente);

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Persona implements ISolicitarPrestamo, IComprar {
+public class Cliente extends Persona implements ISolicitarPrestamo, IComprar, IJuegosFavoritos{
 
     private double puntosFidelidadAcumulados;
     private Mesa mesa;
