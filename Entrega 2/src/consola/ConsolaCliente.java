@@ -25,6 +25,7 @@ public class ConsolaCliente extends ConsolaBasica {
 					} catch (Exception e) {
 						System.out.println("Error al solicitar préstamo: " + e.getMessage());
 					}
+					break;
 				case 3:
 					System.out.println("Funcionalidad de comprar juego aún no implementada.");
 					break;
@@ -44,7 +45,7 @@ public class ConsolaCliente extends ConsolaBasica {
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
-		} while (opcionElegida != 8);
+		} while (opcionElegida != 7);
 	}
 	
 	
