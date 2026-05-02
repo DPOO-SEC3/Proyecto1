@@ -6,7 +6,7 @@ import Modelo.*;
 public class ConsolaCliente extends ConsolaBasica {
 	
 	private int mostrarMenuCliente() {
-		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego","Comprar item cafeteria","Gestionar Juegos favoritos","Desocupar Mesa","Salir"};
+		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego/item cafeteria","Gestionar Juegos favoritos","Desocupar Mesa","Salir"};
 		int opcionElegida= super.mostrarMenu("--------MENU DE CLIENTE--------", opciones);
 		return opcionElegida;
 	}
@@ -30,22 +30,19 @@ public class ConsolaCliente extends ConsolaBasica {
 					System.out.println("Funcionalidad de comprar juego aún no implementada.");
 					break;
 				case 4:
-					System.out.println("Funcionalidad de comprar item cafetería aún no implementada.");
-					break;
-				case 5:
 					ConsolaJuegosFavoritos consolaJuegosFavoritos = new ConsolaJuegosFavoritos();
 					consolaJuegosFavoritos.mostrarMenuJuegosFavoritos(cliente, juegosDisponibles);
 					break;
-				case 6:
+				case 5:
 					DesocuparMesa(cliente);
 					break;
-				case 7:
+				case 6:
 					System.out.println("Saliendo del menú de cliente. ¡Hasta luego!");
 					break;
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
-		} while (opcionElegida != 7);
+		} while (opcionElegida != 6);
 	}
 	
 	

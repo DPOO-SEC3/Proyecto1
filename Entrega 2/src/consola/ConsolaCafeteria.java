@@ -117,7 +117,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Administrador) {
 					System.out.println("Has iniciado sesión como Administrador.");
 					ConsolaAdministrador consolaAdmin = new ConsolaAdministrador();
-					consolaAdmin.iniciar(administrador, inventarioVenta,inventarioPrestamo,todosLosJuegos);
+					consolaAdmin.iniciar((Administrador)usuarios.get(indexUsuarioEncontrado),inventarioVenta,inventarioPrestamo,todosLosJuegos);
 				}
 			}
 		}
