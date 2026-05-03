@@ -32,6 +32,8 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private List<Mesa> mesasDisponibles = new ArrayList<Mesa>();
     private List<Torneo> torneosDisponibles = new ArrayList<Torneo>();
     private Mesa mesaEmpleados= new Mesa(0,100);
+    private List<Empleado> empleados = new ArrayList<>();
+
  
     // Persistencias
     private PersistenciaJuegos   persistenciaJuegos;
@@ -113,12 +115,12 @@ public class ConsolaCafeteria extends ConsolaBasica {
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Mesero) {
 					System.out.println("Has iniciado sesión como Mesero.");
 					ConsolaEmpleado consolaEmpleado = new ConsolaEmpleado();
-					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Mesero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles);
+					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Mesero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados);
 				}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Cocinero) {
 					System.out.println("Has iniciado sesión como Cocinero.");
 					ConsolaEmpleado consolaEmpleado = new ConsolaEmpleado();
-					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Cocinero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles);
+					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Cocinero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados);
 				}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Administrador) {
 					System.out.println("Has iniciado sesión como Administrador.");
