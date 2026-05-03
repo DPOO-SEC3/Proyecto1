@@ -6,11 +6,11 @@ import Modelo.*;
 public class ConsolaCliente extends ConsolaBasica {
 	
 	private int mostrarMenuCliente() {
-		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego/item cafeteria","Gestionar Juegos favoritos","Desocupar Mesa","Salir"};
+		String[] opciones = {"Ocupar Mesa","Pedir/Devoler Juego Prestado","Comprar Juego/item cafeteria","Gestionar Juegos favoritos","Desocupar Mesa","Torneos","Salir"};
 		int opcionElegida= super.mostrarMenu("--------MENU DE CLIENTE--------", opciones);
 		return opcionElegida;
 	}
-	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, Cliente cliente, List<Mesa> mesas) {
+	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, Cliente cliente, List<Mesa> mesas, List<Torneo> torneosDisponibles) {
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuCliente();
@@ -27,7 +27,8 @@ public class ConsolaCliente extends ConsolaBasica {
 					}
 					break;
 				case 3:
-					System.out.println("Funcionalidad de comprar juego aún no implementada.");
+					ConsolaVentas consolaVentas = new ConsolaVentas();
+					consolaVentas.iniciar();
 					break;
 				case 4:
 					ConsolaJuegosFavoritos consolaJuegosFavoritos = new ConsolaJuegosFavoritos();
@@ -37,12 +38,16 @@ public class ConsolaCliente extends ConsolaBasica {
 					DesocuparMesa(cliente);
 					break;
 				case 6:
+					ConsolaTorneos consolaTorneos = new ConsolaTorneos();
+					consolaTorneos.iniciar(torneosDisponibles, cliente);
+					break;
+				case 7:
 					System.out.println("Saliendo del menú de cliente. ¡Hasta luego!");
 					break;
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
-		} while (opcionElegida != 6);
+		} while (opcionElegida != 7);
 	}
 	
 	

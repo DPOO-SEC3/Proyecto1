@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Persona implements ISolicitarPrestamo, IComprar, IJuegosFavoritos{
+public class Cliente extends Persona implements ISolicitarPrestamo, IComprar, IJuegosFavoritos,IInscripcionTorneo {
 
     private double puntosFidelidadAcumulados;
     private Mesa mesa;
     private List<Prestamo> prestamos = new ArrayList<>();
     private List<Venta> ventas = new ArrayList<>();
     private List<JuegoMesa> favoritos = new ArrayList<>();
+    private List<Torneo> torneosInscritos = new ArrayList<>();
 
     public Cliente(String nombre, String apellido, String correoElectronico, String contrasena, String login, double puntosFidelidadAcumulados) {
         super(nombre, apellido, correoElectronico, contrasena, login);
@@ -120,5 +121,32 @@ public class Cliente extends Persona implements ISolicitarPrestamo, IComprar, IJ
             return true;
         }
         return false;
+    }
+    @Override
+    public Torneo inscribirTorneo(List<Torneo> torneosDisponibles, String nombreTorneo, List<Persona> participantes) {
+    	for(Torneo torneo : torneosDisponibles) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				torneo.setParticipantes(participantes);
+				torneosInscritos.add(torneo);
+				return torneo;
+			}
+		}
+		System.out.println("Torneo no encontrado o ya lleno.");
+		return null;
+	}
+    @Override
+    public void retirarTorneo(String nombreTorneo, List<Persona> participantes) {
+		for(Torneo torneo : torneosInscritos) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				for (Persona p : participantes) {
+					torneo.retirarParticipante(p);
+				}
+				torneosInscritos.remove(torneo);
+				return;
+			} else {
+				System.out.println("Torneo no encontrado.");
+				return;
+			}
+		}
     }
 }

@@ -293,5 +293,7 @@ public abstract class ConsolaBasica
 			System.out.println("- Estado: " + ejemplar.getEstado() + ", Disponible: " + (ejemplar.isDisponible() ? "Sí" : "No") + ", Veces prestado: " + ejemplar.getNumeroDeVecesPrestado() + ", Desaparecido: " + (ejemplar.isDesaparecido() ? "Sí" : "No"));
 		}
 	}
+	
+	
 
 }

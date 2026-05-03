@@ -1,5 +1,6 @@
 package consola;
 import Modelo.*;
+
 import Persistencia.PersistenciaJuegos;
 import Persistencia.PersistenciaTurnos;
 import Persistencia.PersistenciaUsuarios;
@@ -15,7 +16,7 @@ import consola.ConsolaInventarios;
 public class ConsolaAdministrador extends ConsolaBasica {
 	
 	private int mostrarMenuAdministrador() {
-		String[] opciones = {"Gestionar Inventarios", "Gestionar Sugerencias", "Gestionar Solicitudes de Cambio de Turno", "Consultar Ventas", "Consultar Historial de Préstamos", "Gestionar Turnos Semanales", "Gestionar Items del Menú","Salir"};
+		String[] opciones = {"Gestionar Inventarios", "Gestionar Sugerencias", "Gestionar Solicitudes de Cambio de Turno", "Consultar Ventas", "Consultar Historial de Préstamos", "Gestionar Turnos Semanales", "Gestionar Items del Menú", "Gestionar Torneos","Salir"};
 		int opcionElegida= super.mostrarMenu("--------MENU DE ADMINISTRADOR--------", opciones);
 		return opcionElegida;
 	}
@@ -33,7 +34,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
 	    consolaTurnos.iniciar(admin);
 	}	
 
-	public void iniciar(Administrador admin, InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles) {
+	public void iniciar(Administrador admin, InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, List<Torneo> torneosDisponibles) {
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuAdministrador();
@@ -60,12 +61,16 @@ public class ConsolaAdministrador extends ConsolaBasica {
 					System.out.println("Funcionalidad de gestión de items del menú aún no implementada.");
 					break;
 				case 8:
+					ConsolaTorneos consolaTorneos = new ConsolaTorneos();
+					consolaTorneos.iniciarAdmin(torneosDisponibles, admin, juegosDisponibles);
+					break;
+				case 9:
 					System.out.println("Saliendo del menú de administrador. ¡Hasta luego!");
 					return;
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
-		} while (opcionElegida != 8);
+		} while (opcionElegida != 9);
 	}
 	
 }

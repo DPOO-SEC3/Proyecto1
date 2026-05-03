@@ -2,7 +2,7 @@ package Modelo;
 
 import java.util.List;
 
-public abstract class Empleado extends Persona implements ISolicitarPrestamo,IComprar, IJuegosFavoritos {
+public abstract class Empleado extends Persona implements ISolicitarPrestamo,IComprar, IJuegosFavoritos, IInscripcionTorneo {
 
     public Empleado(String nombre, String apellido, String correoElectronico, String contrasena, String login) {
         super(nombre, apellido, correoElectronico, contrasena, login);

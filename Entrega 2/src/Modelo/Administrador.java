@@ -127,4 +127,9 @@ public class Administrador extends Persona {
 
         return "Ventas desde " + desde + " hasta " + hasta + ": " + total;
     }
+    
+    public Torneo crearTorneo(String nombre, int numeroParticipantes, JuegoMesa juego, String diaSemana, String tipo) {
+		Torneo torneo = new Torneo(nombre, numeroParticipantes, juego, diaSemana, tipo);
+		return torneo;
+	}
 }

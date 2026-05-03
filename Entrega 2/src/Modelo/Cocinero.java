@@ -12,6 +12,7 @@ public class Cocinero extends Empleado{
     private List<Prestamo> prestamos;
     private List<Venta> ventas;
     private List<JuegoMesa> favoritos;
+    private List<Torneo> torneosInscritos = new ArrayList<>();
 
     public Cocinero(String nombre, String apellido, String correoElectronico, String contrasena, String login) {
         super(nombre, apellido, correoElectronico, contrasena, login);
@@ -118,5 +119,33 @@ public class Cocinero extends Empleado{
 			}
 		}
 		return null; 
+    }
+    
+    @Override
+    public Torneo inscribirTorneo(List<Torneo> torneosDisponibles, String nombreTorneo, List<Persona> participantes) {
+    	for(Torneo torneo : torneosDisponibles) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				torneo.setParticipantes(participantes);
+				torneosInscritos.add(torneo);
+				return torneo;
+			}
+		}
+		System.out.println("Torneo no encontrado o ya lleno.");
+		return null;
+	}
+    @Override
+    public void retirarTorneo(String nombreTorneo, List<Persona> participantes) {
+		for(Torneo torneo : torneosInscritos) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				for (Persona p : participantes) {
+					torneo.retirarParticipante(p);
+				}
+				torneosInscritos.remove(torneo);
+				return;
+			} else {
+				System.out.println("Torneo no encontrado.");
+				return;
+			}
+		}
     }
 }
