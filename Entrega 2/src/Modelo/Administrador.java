@@ -74,13 +74,12 @@ public class Administrador extends Persona {
     }
 
     public void repararEjemplar(EjemplarJuego ejemplar) {
-        ejemplar.setEstado("disponible");
+        ejemplar.setEstado("Reparado");
         ejemplar.setDisponible(true);
     }
 
     public void marcarEjemplarDesaparecido(EjemplarJuego ejemplar) {
-        ejemplar.setEstado("desaparecido");
-        ejemplar.setDisponible(false);
+        ejemplar.marcarDesaparecido();
     }
 
     public void agregarItemMenu(ItemMenu item) {

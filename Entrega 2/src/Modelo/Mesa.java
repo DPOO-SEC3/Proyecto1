@@ -128,6 +128,7 @@ public class Mesa {
 	public void registrarPrestamo(Prestamo prestamo)
 	{
 		prestamos.add(prestamo);
+		prestamo.getEjemplar().setDisponible(false);;
 	}
 	
 	public void registrarVentaCafeteria(VentaCafeteria venta)

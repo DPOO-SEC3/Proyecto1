@@ -24,7 +24,7 @@ public class ConsolaJuegosFavoritos extends ConsolaBasica{
 				default:
 					System.out.println("Opción no válida. Por favor, elija una opción del menú.");
 			}
-		} while (opcion != 5);
+		} while (opcion != 4);
 		
 	}
 	

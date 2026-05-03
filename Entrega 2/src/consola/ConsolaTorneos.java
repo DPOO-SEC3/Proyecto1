@@ -14,7 +14,24 @@ public class ConsolaTorneos extends ConsolaBasica{
  	}
 	
 	public <T extends Persona & IInscripcionTorneo> void iniciar(List<Torneo> torneosDisponibles, T user) {
-		
+		int opcionelegida= mostrarMenuTorneos();
+		do {
+			switch (opcionelegida) {
+			case 1:
+				mostrarTorneosDisponibles(torneosDisponibles);
+				break;
+			case 2:
+				inscribirseTorneo(torneosDisponibles,user);
+				break;
+			case 3:
+				retirarseTorneo(user);
+				break;
+			case 4:
+				System.out.println("Volviendo al menu principal...");
+				break;
+				
+			}
+		} while(opcionelegida != 4);
 		 
 	}
 	

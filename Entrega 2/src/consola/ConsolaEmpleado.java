@@ -15,7 +15,7 @@ public class ConsolaEmpleado  extends ConsolaBasica{
 		return opcion;
 	}
 
-	public< T extends Empleado> void iniciarEmpleado(InventarioVenta inventariVenta, InventarioPrestamo inventariPrestamo, Mesa mesa, T user, List<Torneo> torneosDisponibles) {
+	public< T extends Empleado> void iniciarEmpleado(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, Mesa mesa, T user, List<Torneo> torneosDisponibles) {
 		int opcion;
 		do {
 			opcion = mostrarMenuEmpleado();
@@ -29,12 +29,12 @@ public class ConsolaEmpleado  extends ConsolaBasica{
 				case 3:
 					System.out.println("Comprar Juego/Item cafetería");
 					ConsolaVentas consolaVentas = new ConsolaVentas();
-					consolaVentas.iniciar();
+					consolaVentas.iniciar(inventarioVenta,user);
 					break;
 				case 4:
 					System.out.println("Pedir juego prestado");
 					ConsolaPrestamos consolaPrestamos = new ConsolaPrestamos();
-					consolaPrestamos.iniciar(inventariPrestamo,mesa,user);
+					consolaPrestamos.iniciar(inventarioPrestamo,mesa,user);
 					break;
 				case 5:
 					System.out.println("Falta implementar consola para Sugerencia platillos");

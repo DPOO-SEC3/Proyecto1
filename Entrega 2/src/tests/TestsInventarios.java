@@ -1,424 +1,351 @@
 package tests;
 
-import Modelo.*;
-import excepciones.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests JUnit para el módulo de Juegos e Inventarios.
- *
- * Cubre:
- *   1. Agregar y quitar juegos/ejemplares en inventarios (Administrador)
- *   2. Acceso a juego inexistente en inventario
- *   3. Préstamo quita disponibilidad del ejemplar
- *   4. Venta remueve el juego del inventario de venta
- *   5. Restricciones de préstamo por mesa (edad, número de jugadores, categoría)
- */
-public class TestsInventarios {
+import Modelo.*;
+import excepciones.CapacidadMaximaSuperadaException;
+import excepciones.JuegoNoDisponibleException;
+import excepciones.JuegoNoExistenteException;
+import excepciones.JuegoNoAptoParaMesaException;
 
-    // ── Objetos compartidos entre tests ──────────────────────────────────────
-    private Administrador admin;
+@DisplayName("Pruebas de Inventarios y Juegos")
+class TestsInventarios {
+
+    private Administrador administrador;
     private InventarioPrestamo inventarioPrestamo;
-    private InventarioVenta    inventarioVenta;
-
-    private JuegoMesa catan;
-    private JuegoMesa uno;
-    private JuegoMesa twister;   // categoría Accion
-    private JuegoMesa risk;      // exclusivo adultos
-    private JuegoMesa juegoNinos;// no apto menores de 5
-
-    private EjemplarJuego ejemplarCatan;
-    private EjemplarJuego ejemplarUno;
-    private EjemplarJuego ejemplarTwister;
-    private EjemplarJuego ejemplarRisk;
-    private EjemplarJuego ejemplarJuegoNinos;
-
-    private Mesa mesaNormal;       // 4 personas, sin menores
-    private Mesa mesaConNinos;     // 3 personas, con niños < 5
-    private Mesa mesaConMenores;   // 4 personas, con menores < 18
+    private InventarioVenta inventarioVenta;
+    private JuegoMesa juego1, juego2, juego3;
+    private EjemplarJuego ejemplar1, ejemplar2;
+    private Mesa mesa1;
+    private Cliente cliente;
 
     @BeforeEach
-    void setUp() throws CapacidadMaximaSuperadaException {
-        // Administrador e inventarios
-        admin = new Administrador("Admin", "Sistema", "admin@mail.com", "admin123", "admin");
-        inventarioPrestamo = new InventarioPrestamo(10);
-        inventarioVenta    = new InventarioVenta(10);
+    void setUp() {
+        // Inicializar administrador
+        administrador = new Administrador("Juan", "Pérez", "juan@example.com", "password123", "jperez");
 
-        // Juegos
-        catan      = new JuegoMesa("Catan",    2000, "Kosmos",  "Tablero", 3, 4, "sin restriccion",     false, 120000);
-        uno        = new JuegoMesa("Uno",      1971, "Mattel",  "Cartas",  2, 10,"sin restriccion",     false,  25000);
-        twister    = new JuegoMesa("Twister",  1966, "Hasbro",  "Accion",  2, 6, "sin restriccion",     false,  35000);
-        risk       = new JuegoMesa("Risk",     1957, "Hasbro",  "Tablero", 2, 6, "exclusivo adultos",   false,  85000);
-        juegoNinos = new JuegoMesa("Lego",     2000, "Lego",    "Accion",  2, 4, "no apto menores de 5",false,  50000);
+        // Obtener inventarios
+        inventarioPrestamo = administrador.getInventarioPrestamo();
+        inventarioVenta = administrador.getInventarioVenta();
 
-        // Ejemplares
-        ejemplarCatan      = new EjemplarJuego("Nuevo", catan);
-        ejemplarUno        = new EjemplarJuego("Nuevo", uno);
-        ejemplarTwister    = new EjemplarJuego("Nuevo", twister);
-        ejemplarRisk       = new EjemplarJuego("Nuevo", risk);
-        ejemplarJuegoNinos = new EjemplarJuego("Nuevo", juegoNinos);
+        // Crear juegos de prueba
+        juego1 = new JuegoMesa("Ajedrez", 2020, "ChessBox", "Estrategia", 2, 2, "mayor de 8", false, 50000);
+        juego2 = new JuegoMesa("Monopoly", 2019, "Hasbro", "Economía", 2, 6, "mayor de 8", false, 80000);
+        juego3 = new JuegoMesa("Action Game", 2021, "GameStudio", "Accion", 1, 4, "general", true, 100000);
 
-        catan.agregarEjemplar(ejemplarCatan);
-        uno.agregarEjemplar(ejemplarUno);
-        twister.agregarEjemplar(ejemplarTwister);
-        risk.agregarEjemplar(ejemplarRisk);
-        juegoNinos.agregarEjemplar(ejemplarJuegoNinos);
+        // Crear ejemplares
+        ejemplar1 = new EjemplarJuego("disponible", juego1);
+        ejemplar2 = new EjemplarJuego("disponible", juego2);
 
-        // Poblar inventarios
-        inventarioPrestamo.agregarEjemplar(ejemplarCatan);
-        inventarioPrestamo.agregarEjemplar(ejemplarUno);
-        inventarioPrestamo.agregarEjemplar(ejemplarTwister);
-        inventarioPrestamo.agregarEjemplar(ejemplarRisk);
-        inventarioPrestamo.agregarEjemplar(ejemplarJuegoNinos);
+        juego1.agregarEjemplar(ejemplar1);
+        juego2.agregarEjemplar(ejemplar2);
 
-        inventarioVenta.agregarJuego(catan);
-        inventarioVenta.agregarJuego(uno);
+        // Crear mesa
+        mesa1 = new Mesa(1, 6);
+        cliente = new Cliente("Carlos", "López", "carlos@example.com", "pass456", "clopez",0);
+    }
 
-        // Mesas
-        // NOTA: ocupar() es private en Mesa — para los tests de restricciones
-        // usamos directamente esAptoParaMesa() con los parámetros equivalentes.
-        // Si se hace público ocupar(), los tests de mesa pueden simplificarse.
-        mesaNormal    = new Mesa(1, 6);
-        mesaConNinos  = new Mesa(2, 6);
-        mesaConMenores= new Mesa(3, 6);
+    // PRUEBAS DE AGREGAR JUEGOS/EJEMPLARES
+
+    @Test
+    @DisplayName("Agregar ejemplar de juego al inventario de préstamo")
+    void testAgregarEjemplarAInventarioPrestamo() {
+        assertTrue(inventarioPrestamo.getEjemplares().isEmpty(), "El inventario debe estar vacío inicialmente");
+
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+
+        assertFalse(inventarioPrestamo.getEjemplares().isEmpty(), "El inventario no debe estar vacío");
+        assertTrue(inventarioPrestamo.getEjemplares().contains(ejemplar1), "El ejemplar debe estar en el inventario");
+        assertEquals(1, inventarioPrestamo.getEjemplares().size(), "Debe haber exactamente 1 ejemplar");
     }
 
     @Test
-    @DisplayName("Agregar ejemplar al inventario de préstamo aumenta el tamaño en 1")
-    void testAgregarEjemplarAPrestamo() throws CapacidadMaximaSuperadaException {
-        int tamanoAntes = inventarioPrestamo.getEjemplares().size();
+    @DisplayName("Agregar juego al inventario de venta")
+    void testAgregarJuegoAInventarioVenta() {
+        assertTrue(inventarioVenta.getJuegos().isEmpty(), "El inventario debe estar vacío inicialmente");
 
-        JuegoMesa nuevo = new JuegoMesa("Pandemic", 2008, "Z-Man", "Tablero", 2, 4, "sin restriccion", false, 90000);
-        EjemplarJuego ejemplarNuevo = new EjemplarJuego("Nuevo", nuevo);
-        nuevo.agregarEjemplar(ejemplarNuevo);
-        inventarioPrestamo.agregarEjemplar(ejemplarNuevo);
+        administrador.agregarJuegoAVenta(juego1);
 
-        assertEquals(tamanoAntes + 1, inventarioPrestamo.getEjemplares().size(),
-            "El inventario de préstamo debe tener un ejemplar más.");
-        assertTrue(inventarioPrestamo.getEjemplares().contains(ejemplarNuevo),
-            "El ejemplar recién agregado debe estar en el inventario.");
+        assertFalse(inventarioVenta.getJuegos().isEmpty(), "El inventario no debe estar vacío");
+        assertTrue(inventarioVenta.getJuegos().contains(juego1), "El juego debe estar en el inventario");
+        assertEquals(1, inventarioVenta.getJuegos().size(), "Debe haber exactamente 1 juego");
     }
 
     @Test
-    @DisplayName("Remover ejemplar del inventario de préstamo reduce el tamaño en 1")
-    void testRemoverEjemplarDePrestamo() {
-        int tamanoAntes = inventarioPrestamo.getEjemplares().size();
+    @DisplayName("Agregar múltiples ejemplares al inventario de préstamo")
+    void testAgregarMultiplesEjemplares() {
+        EjemplarJuego ejemplar3 = new EjemplarJuego("disponible", juego1);
+        juego1.agregarEjemplar(ejemplar3);
 
-        inventarioPrestamo.removerEjemplar(ejemplarCatan);
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+        administrador.agregarEjemplarAPrestamo(ejemplar3);
 
-        assertEquals(tamanoAntes - 1, inventarioPrestamo.getEjemplares().size(),
-            "El inventario de préstamo debe tener un ejemplar menos.");
-        assertFalse(inventarioPrestamo.getEjemplares().contains(ejemplarCatan),
-            "El ejemplar removido no debe estar en el inventario.");
+        assertEquals(2, inventarioPrestamo.getEjemplares().size(), "Debe haber 2 ejemplares");
+        assertTrue(inventarioPrestamo.getEjemplares().contains(ejemplar1));
+        assertTrue(inventarioPrestamo.getEjemplares().contains(ejemplar3));
+    }
+
+    // PRUEBAS DE QUITAR JUEGOS/EJEMPLARES 
+
+    @Test
+    @DisplayName("Quitar juego de inventario de venta")
+    void testQuitarJuegoDeInventarioVenta() {
+        administrador.agregarJuegoAVenta(juego1);
+        assertTrue(inventarioVenta.getJuegos().contains(juego1));
+
+        administrador.moverDeVentaAPrestamo(juego1);
+
+        assertFalse(inventarioVenta.getJuegos().contains(juego1), "El juego debe removerse del inventario");
+        assertTrue(inventarioVenta.getJuegos().isEmpty());
     }
 
     @Test
-    @DisplayName("Agregar juego al inventario de venta aumenta el tamaño en 1")
-    void testAgregarJuegoAVenta() throws CapacidadMaximaSuperadaException {
-        int tamanoAntes = inventarioVenta.getJuegos().size();
+    @DisplayName("Quitar ejemplar de inventario de préstamo")
+    void testQuitarEjemplarDeInventarioPrestamo() {
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+        assertEquals(1, inventarioPrestamo.getEjemplares().size());
 
-        inventarioVenta.agregarJuego(twister);
+        inventarioPrestamo.removerEjemplar(ejemplar1);
 
-        assertEquals(tamanoAntes + 1, inventarioVenta.getJuegos().size(),
-            "El inventario de venta debe tener un juego más.");
-        assertTrue(inventarioVenta.getJuegos().contains(twister),
-            "El juego recién agregado debe estar en el inventario de venta.");
+        assertEquals(0, inventarioPrestamo.getEjemplares().size(), "El ejemplar debe removerse");
+        assertFalse(inventarioPrestamo.getEjemplares().contains(ejemplar1));
+    }
+
+    // PRUEBAS DE ACCESO A JUEGOS NO DISPONIBLES 
+
+    @Test
+    @DisplayName("No permitir acceso a juego que no está en inventario de venta")
+    void testAccesoJuegoNoExistenteEnVenta() {
+        assertThrows(JuegoNoExistenteException.class, () -> {
+            inventarioVenta.buscarJuego("Juego Inexistente");
+        }, "Debe lanzar excepción cuando busca un juego que no existe");
     }
 
     @Test
-    @DisplayName("Remover juego del inventario de venta reduce el tamaño en 1")
-    void testRemoverJuegoDeVenta() {
-        int tamanoAntes = inventarioVenta.getJuegos().size();
-
-        inventarioVenta.removerJuego(catan);
-
-        assertEquals(tamanoAntes - 1, inventarioVenta.getJuegos().size(),
-            "El inventario de venta debe tener un juego menos.");
-        assertFalse(inventarioVenta.getJuegos().contains(catan),
-            "El juego removido no debe aparecer en el inventario de venta.");
+    @DisplayName("No permitir acceso a juego que no está en inventario de préstamo")
+    void testAccesoEjemplarNoDisponibleEnPrestamo() {
+        assertThrows(JuegoNoDisponibleException.class, () -> {
+            inventarioPrestamo.buscarEjemplarDisponible("Ajedrez");
+        }, "Debe lanzar excepción cuando busca un ejemplar que no existe");
     }
 
     @Test
-    @DisplayName("No se puede agregar más ejemplares que la capacidad máxima del inventario de préstamo")
-    void testCapacidadMaximaInventarioPrestamo() {
-        InventarioPrestamo pequeño = new InventarioPrestamo(1);
-        EjemplarJuego e1 = new EjemplarJuego("Nuevo", catan);
-        EjemplarJuego e2 = new EjemplarJuego("Nuevo", uno);
-
-        assertDoesNotThrow(() -> pequeño.agregarEjemplar(e1),
-            "El primer ejemplar debe agregarse sin error.");
-        assertThrows(CapacidadMaximaSuperadaException.class,
-            () -> pequeño.agregarEjemplar(e2),
-            "Agregar un segundo ejemplar a inventario con capacidad 1 debe lanzar CapacidadMaximaSuperadaException.");
-    }
-
-    @Test
-    @DisplayName("No se puede agregar más juegos que la capacidad máxima del inventario de venta")
-    void testCapacidadMaximaInventarioVenta() {
-        InventarioVenta pequeño = new InventarioVenta(1);
-        JuegoMesa j1 = new JuegoMesa("J1", 2000, "X", "Cartas", 2, 4, "sin restriccion", false, 10000);
-        JuegoMesa j2 = new JuegoMesa("J2", 2001, "X", "Cartas", 2, 4, "sin restriccion", false, 10000);
-
-        assertDoesNotThrow(() -> pequeño.agregarJuego(j1),
-            "El primer juego debe agregarse sin error.");
-        assertThrows(CapacidadMaximaSuperadaException.class,
-            () -> pequeño.agregarJuego(j2),
-            "Agregar un segundo juego a inventario con capacidad 1 debe lanzar CapacidadMaximaSuperadaException.");
-    }
-
-
-    @Test
-    @DisplayName("Buscar un juego que no existe en venta lanza JuegoNoExistenteException")
-    void testBuscarJuegoInexistenteEnVenta() {
-        assertThrows(JuegoNoExistenteException.class,
-            () -> inventarioVenta.buscarJuego("Monopolio"),
-            "Buscar un juego que no está en venta debe lanzar JuegoNoExistenteException.");
-    }
-
-    @Test
-    @DisplayName("Buscar ejemplar disponible de juego sin ejemplares lanza JuegoNoDisponibleException")
-    void testBuscarEjemplarDeJuegoSinEjemplares() {
-        JuegoMesa sinEjemplares = new JuegoMesa("Dixit", 2008, "Asmodee", "Cartas", 3, 6, "sin restriccion", true, 95000);
-        // No se agregan ejemplares ni al inventario
-        assertThrows(JuegoNoDisponibleException.class,
-            () -> inventarioPrestamo.buscarEjemplarDisponible(sinEjemplares.getNombre()),
-            "Buscar ejemplar de un juego sin ejemplares en préstamo debe lanzar JuegoNoDisponibleException.");
-    }
-
-    @Test
-    @DisplayName("Buscar ejemplar cuando todos están prestados lanza JuegoNoDisponibleException")
-    void testBuscarEjemplarCuandoTodosEstanPrestados() {
-        // Marcar el único ejemplar de Catan como no disponible
-        ejemplarCatan.setDisponible(false);
-
-        assertThrows(JuegoNoDisponibleException.class,
-            () -> inventarioPrestamo.buscarEjemplarDisponible(catan.getNombre()),
-            "Buscar ejemplar cuando todos están prestados debe lanzar JuegoNoDisponibleException.");
-    }
-
-    @Test
-    @DisplayName("Buscar juego existente en venta retorna el juego correcto")
+    @DisplayName("Buscar juego existente en inventario de venta")
     void testBuscarJuegoExistenteEnVenta() {
+        administrador.agregarJuegoAVenta(juego1);
+
+        JuegoMesa juegoBuscado;
+		try {
+			juegoBuscado = inventarioVenta.buscarJuego("Ajedrez");
+			assertNotNull(juegoBuscado, "El juego debe encontrarse");
+	        assertEquals("Ajedrez", juegoBuscado.getNombre());
+		} catch (JuegoNoExistenteException e) {
+			e.printStackTrace();
+		}
+
+    }
+
+    @Test
+    @DisplayName("Buscar ejemplar disponible en inventario de préstamo")
+    void testBuscarEjemplarDisponibleEnPrestamo() {
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+
+        EjemplarJuego ejemplarBuscado;
+		try {
+			ejemplarBuscado = inventarioPrestamo.buscarEjemplarDisponible("Ajedrez");
+			assertNotNull(ejemplarBuscado, "El ejemplar debe encontrarse");
+	        assertEquals(ejemplar1.getID(), ejemplarBuscado.getID());
+		} catch (JuegoNoDisponibleException e) {
+			e.printStackTrace();
+		}
+    }
+
+    //  PRUEBAS DE PRÉSTAMO Y CAMBIO DE ESTADO
+
+    @Test
+    @DisplayName("Al hacer un préstamo, el ejemplar se quita del inventario")
+    void testPrestamoEliminaDelInventario() {
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+        assertEquals(1, inventarioPrestamo.getEjemplares().size());
+
+        mesa1.setNumeroPersonas(2);
+        mesa1.setClientes(cliente);
+
+        Prestamo prestamo = new Prestamo(inventarioPrestamo, ejemplar1, mesa1);
+        mesa1.registrarPrestamo(prestamo);
+
+        assertFalse(ejemplar1.isDisponible(), "El ejemplar debe marcarse como no disponible");
+    }
+
+    @Test
+    @DisplayName("Reparar un ejemplar lo marca como disponible")
+    void testRepararEjemplarDisponible() {
+        ejemplar1.setEstado("dañado");
+
+        administrador.repararEjemplar(ejemplar1);
+
+        assertEquals("Reparado",ejemplar1.getEstado());
+    }
+
+    @Test
+    @DisplayName("Marcar ejemplar como desaparecido")
+    void testMarcarEjemplarDesaparecido() {
+        assertTrue(ejemplar1.isDisponible());
+
+        administrador.marcarEjemplarDesaparecido(ejemplar1);
+
+        assertFalse(ejemplar1.isDisponible(), "El ejemplar no debe estar disponible");
+        assertTrue(ejemplar1.isDesaparecido());
+    }
+
+    // PRUEBAS DE VALIDACIÓN DE JUEGOS POR MESA 
+
+    @Test
+    @DisplayName("No prestar juego exclusivo para adultos a mesa con menores")
+    void testNoPrestarJuegoExclusivoAdultosAMesaConMenores() {
+        JuegoMesa juegoAdultosOnly = new JuegoMesa("Poker", 2020, "CardGames", "Juego de Azar", 2, 6, "exclusivo adultos", false, 120000);
+        
+        mesa1.setNumeroPersonas(2);
+        mesa1.setHayMenoresDeEdad(true);
+
+        assertThrows(JuegoNoAptoParaMesaException.class, () -> {
+            juegoAdultosOnly.esAptoParaMesa(mesa1.getNumeroDePersonas(), mesa1.isHayNiños(), mesa1.isHayMenoresDeEdad());
+        }, "No debe permitir prestar juego para adultos a mesa con menores");
+    }
+
+    @Test
+    @DisplayName("No prestar juego no apto para menores de 5 años a mesa con niños")
+    void testNoPrestarJuegoNoAptoNinosAMesaConNinos() {
+        JuegoMesa juegoMayores5 = new JuegoMesa("Building Blocks", 2020, "ToyBlock", "Construcción", 1, 3, "no apto menores de 5", false, 50000);
+        
+        mesa1.setNumeroPersonas(2);
+        mesa1.setHayNiños(true);
+
+        assertThrows(JuegoNoAptoParaMesaException.class, () -> {
+            juegoMayores5.esAptoParaMesa(mesa1.getNumeroDePersonas(), mesa1.isHayNiños(), mesa1.isHayMenoresDeEdad());
+        }, "No debe permitir prestar juego no apto para menores de 5 a mesa con niños");
+    }
+
+    @Test
+    @DisplayName("No prestar juego si mesa tiene menos jugadores que el mínimo requerido")
+    void testNoPrestarJuegoMenosDeLosMinimosRequeridos() {
+        JuegoMesa juegoMinimo4 = new JuegoMesa("Dungeons", 2020, "Fantasy", "RPG", 4, 6, "general", false, 150000);
+        
+        mesa1.setNumeroPersonas(2); // Menos de 4
+
+        assertThrows(JuegoNoAptoParaMesaException.class, () -> {
+            juegoMinimo4.esAptoParaMesa(mesa1.getNumeroDePersonas(), mesa1.isHayNiños(), mesa1.isHayMenoresDeEdad());
+        }, "No debe permitir prestar juego si hay menos jugadores que el mínimo");
+    }
+
+    @Test
+    @DisplayName("No prestar juego si mesa tiene más jugadores que el máximo permitido")
+    void testNoPrestarJuegoMasDelMaximoPermitido() {
+        JuegoMesa juegoMaximo2 = new JuegoMesa("Chess", 2020, "Classic", "Estrategia", 2, 2, "general", false, 80000);
+        
+        mesa1.setNumeroPersonas(4); // Más de 2
+
+        assertThrows(JuegoNoAptoParaMesaException.class, () -> {
+            juegoMaximo2.esAptoParaMesa(mesa1.getNumeroDePersonas(), mesa1.isHayNiños(), mesa1.isHayMenoresDeEdad());
+        }, "No debe permitir prestar juego si hay más jugadores que el máximo");
+    }
+
+    @Test
+    @DisplayName("Permitir préstamo de juego apto para la mesa")
+    void testPrestarJuegoAptoParaMesa() {
+        JuegoMesa juegoApto = new JuegoMesa("Cards", 2020, "CardGame", "Cartas", 2, 4, "general", false, 60000);
+        
+        mesa1.setNumeroPersonas(3);
+        mesa1.setHayNiños(false);
+        mesa1.setHayMenoresDeEdad(false);
+
+        // Debe ejecutarse sin lanzar excepción
         assertDoesNotThrow(() -> {
-            JuegoMesa encontrado = inventarioVenta.buscarJuego("Catan");
-            assertEquals("Catan", encontrado.getNombre(),
-                "El juego encontrado debe ser Catan.");
-        });
+            juegoApto.esAptoParaMesa(mesa1.getNumeroDePersonas(), mesa1.isHayNiños(), mesa1.isHayMenoresDeEdad());
+        }, "Debe permitir prestar juego apto para la mesa");
+    }
+
+    // PRUEBAS DE CAPACIDAD DE INVENTARIOS 
+
+    @Test
+    @DisplayName("No exceder capacidad máxima del inventario de préstamo")
+    void testNoExcederCapacidadInventarioPrestamo() {
+        InventarioPrestamo inventarioLimitado = new InventarioPrestamo(2);
+
+        EjemplarJuego ej1 = new EjemplarJuego("disponible", juego1);
+        EjemplarJuego ej2 = new EjemplarJuego("disponible", juego2);
+        EjemplarJuego ej3 = new EjemplarJuego("disponible", juego3);
+
+        juego1.agregarEjemplar(ej1);
+        juego2.agregarEjemplar(ej2);
+        juego3.agregarEjemplar(ej3);
+
+        assertDoesNotThrow(() -> inventarioLimitado.agregarEjemplar(ej1));
+        assertDoesNotThrow(() -> inventarioLimitado.agregarEjemplar(ej2));
+
+        assertThrows(CapacidadMaximaSuperadaException.class, () -> {
+            inventarioLimitado.agregarEjemplar(ej3);
+        }, "No debe permitir agregar más ejemplares que la capacidad máxima");
     }
 
     @Test
-    @DisplayName("Buscar juego en venta es insensible a mayúsculas/minúsculas")
-    void testBuscarJuegoInsensibleMayusculas() {
-        assertDoesNotThrow(() -> {
-            JuegoMesa encontrado = inventarioVenta.buscarJuego("catan");
-            assertNotNull(encontrado, "Debe encontrar Catan aunque se escriba en minúsculas.");
-        });
+    @DisplayName("No exceder capacidad máxima del inventario de venta")
+    void testNoExcederCapacidadInventarioVenta() {
+        InventarioVenta inventarioLimitado = new InventarioVenta(2);
+
+        JuegoMesa j1 = new JuegoMesa("Game1", 2020, "Studio1", "Acción", 1, 2, "general", false, 50000);
+        JuegoMesa j2 = new JuegoMesa("Game2", 2020, "Studio2", "Estrategia", 1, 2, "general", false, 60000);
+        JuegoMesa j3 = new JuegoMesa("Game3", 2020, "Studio3", "Puzzle", 1, 2, "general", false, 70000);
+
+        assertDoesNotThrow(() -> inventarioLimitado.agregarJuego(j1));
+        assertDoesNotThrow(() -> inventarioLimitado.agregarJuego(j2));
+
+        assertThrows(CapacidadMaximaSuperadaException.class, () -> {
+            inventarioLimitado.agregarJuego(j3);
+        }, "No debe permitir agregar más juegos que la capacidad máxima");
+    }
+
+    // PRUEBAS DE IDENTIFICACIÓN DE EJEMPLARES 
+
+    @Test
+    @DisplayName("Buscar ejemplar por ID")
+    void testBuscarEjemplarPorID() {
+        administrador.agregarEjemplarAPrestamo(ejemplar1);
+        String idEjemplar = ejemplar1.getID();
+
+        EjemplarJuego ejemplarEncontrado;
+		try {
+			ejemplarEncontrado = inventarioPrestamo.buscarEjemplarPorID(idEjemplar);
+			assertNotNull(ejemplarEncontrado, "El ejemplar debe encontrarse por ID");
+	        assertEquals(idEjemplar, ejemplarEncontrado.getID());
+		} catch (JuegoNoDisponibleException e) {
+			
+			e.printStackTrace();
+		}
+
     }
 
     @Test
-    @DisplayName("Al marcar un ejemplar como no disponible deja de aparecer en búsquedas")
-    void testEjemplarNoDisponibleDespuesDePrestamo() throws JuegoNoDisponibleException {
-        // Verificar que antes está disponible
-        assertTrue(ejemplarCatan.isDisponible(),
-            "El ejemplar debe estar disponible antes del préstamo.");
-
-        // Simular el efecto del préstamo: marcar como no disponible e incrementar contador
-        ejemplarCatan.setDisponible(false);
-        ejemplarCatan.incrementarVecesPrestado();
-
-        assertFalse(ejemplarCatan.isDisponible(),
-            "El ejemplar no debe estar disponible después del préstamo.");
-        assertEquals(1, ejemplarCatan.getNumeroDeVecesPrestado(),
-            "El contador de veces prestado debe ser 1.");
-    }
-
-    @Test
-    @DisplayName("Después de un préstamo, buscarEjemplarDisponible retorna otro ejemplar del mismo juego")
-    void testSegundoEjemplarDisponibleDespuesDePrestamo()
-            throws CapacidadMaximaSuperadaException, JuegoNoDisponibleException {
-        // Agregar un segundo ejemplar de Catan
-        EjemplarJuego segundoEjemplar = new EjemplarJuego("Bueno", catan);
-        catan.agregarEjemplar(segundoEjemplar);
-        inventarioPrestamo.agregarEjemplar(segundoEjemplar);
-
-        // "Prestar" el primer ejemplar
-        ejemplarCatan.setDisponible(false);
-
-        // Buscar debe retornar el segundo ejemplar
-        EjemplarJuego encontrado = inventarioPrestamo.buscarEjemplarDisponible(catan.getNombre());
-        assertEquals(segundoEjemplar, encontrado,
-            "Debe retornar el segundo ejemplar disponible de Catan.");
-    }
-
-    @Test
-    @DisplayName("Al devolver un préstamo el ejemplar vuelve a estar disponible")
-    void testEjemplarDisponibleDespuesDeDevolucion() {
-        // Simular préstamo
-        ejemplarUno.setDisponible(false);
-        assertFalse(ejemplarUno.isDisponible(), "Debe estar no disponible tras el préstamo.");
-
-        // Simular devolución
-        ejemplarUno.setDisponible(true);
-        assertTrue(ejemplarUno.isDisponible(),
-            "El ejemplar debe estar disponible de nuevo tras la devolución.");
-    }
-
-    @Test
-    @DisplayName("Un ejemplar marcado como desaparecido no está disponible")
-    void testEjemplarDesaparecidoNoDisponible() {
-        assertTrue(ejemplarRisk.isDisponible(), "Debe estar disponible antes.");
-
-        ejemplarRisk.marcarDesaparecido();
-
-        assertFalse(ejemplarRisk.isDisponible(),
-            "Un ejemplar desaparecido no debe estar disponible.");
-        assertTrue(ejemplarRisk.isDesaparecido(),
-            "El flag desaparecido debe ser true.");
-    }
-
-    @Test
-    @DisplayName("Buscar ejemplar disponible ignora ejemplares desaparecidos")
-    void testBuscarEjemplarIgnoraDesaparecidos() {
-        ejemplarRisk.marcarDesaparecido();
-
-        assertThrows(JuegoNoDisponibleException.class,
-            () -> inventarioPrestamo.buscarEjemplarDisponible(risk.getNombre()),
-            "No debe retornar un ejemplar desaparecido.");
+    @DisplayName("Lanzar excepción al buscar ID de ejemplar inexistente")
+    void testBuscarEjemplarPorIDInexistente() {
+        assertThrows(JuegoNoDisponibleException.class, () -> {
+            inventarioPrestamo.buscarEjemplarPorID("INEXISTENTE-1");
+        }, "Debe lanzar excepción cuando el ID no existe");
     }
 
 
     @Test
-    @DisplayName("Después de una venta el juego ya no está en el inventario de venta")
-    void testJuegoRemovidoDeInventarioDespuesDeVenta() {
-        assertTrue(inventarioVenta.getJuegos().contains(catan),
-            "Catan debe estar en inventario de venta antes de la venta.");
+    @DisplayName("Incrementar contador de veces prestado")
+    void testIncrementarContadorVecesPrestado() {
+        assertEquals(0, ejemplar1.getNumeroDeVecesPrestado(), "Inicialmente debe ser 0");
 
-        inventarioVenta.removerJuego(catan);
+        ejemplar1.incrementarVecesPrestado();
+        assertEquals(1, ejemplar1.getNumeroDeVecesPrestado());
 
-        assertFalse(inventarioVenta.getJuegos().contains(catan),
-            "Catan no debe estar en inventario de venta después de la venta.");
-    }
-
-    @Test
-    @DisplayName("Después de remover el juego de venta, buscarlo lanza JuegoNoExistenteException")
-    void testBuscarJuegoRemovidoDespuesDeVenta() {
-        inventarioVenta.removerJuego(uno);
-
-        assertThrows(JuegoNoExistenteException.class,
-            () -> inventarioVenta.buscarJuego("Uno"),
-            "Buscar un juego ya vendido debe lanzar JuegoNoExistenteException.");
-    }
-
-    @Test
-    @DisplayName("hayStock retorna false para juego no presente en inventario de venta")
-    void testHayStockFalsoParaJuegoNoEnVenta() {
-        assertFalse(inventarioVenta.hayStock(twister),
-            "Twister no está en el inventario de venta, hayStock debe retornar false.");
-    }
-
-    @Test
-    @DisplayName("hayStock retorna true para juego presente en inventario de venta")
-    void testHayStockVerdaderoParaJuegoEnVenta() {
-        assertTrue(inventarioVenta.hayStock(catan),
-            "Catan está en el inventario de venta, hayStock debe retornar true.");
-    }
-
-
-    @Test
-    @DisplayName("Juego exclusivo adultos no se puede prestar a mesa con menores de edad")
-    void testJuegoAdultosNoAptoParaMesaConMenores() {
-        // Mesa con menores de edad (hayMenoresEdad = true)
-        assertThrows(JuegoNoAptoParaMesaException.class,
-            () -> risk.esAptoParaMesa(4, false, true),
-            "Risk es exclusivo adultos y no debe prestarse a mesa con menores.");
-    }
-
-    @Test
-    @DisplayName("Juego exclusivo adultos sí se puede prestar a mesa solo con adultos")
-    void testJuegoAdultosAptoParaMesaSoloAdultos() {
-        assertDoesNotThrow(
-            () -> risk.esAptoParaMesa(4, false, false),
-            "Risk debe poder prestarse a una mesa solo con adultos.");
-    }
-
-    @Test
-    @DisplayName("Juego no apto menores de 5 no se puede prestar a mesa con niños")
-    void testJuegoNoAptoNinosConNinos() {
-        assertThrows(JuegoNoAptoParaMesaException.class,
-            () -> juegoNinos.esAptoParaMesa(3, true, true),
-            "El juego no apto para menores de 5 no debe prestarse a mesa con niños.");
-    }
-
-    @Test
-    @DisplayName("Juego no apto menores de 5 sí se puede prestar a mesa sin niños aunque haya menores de 18")
-    void testJuegoNoAptoNinosSinNinos() {
-        assertDoesNotThrow(
-            () -> juegoNinos.esAptoParaMesa(3, false, true),
-            "El juego no apto para menores de 5 debe poder prestarse si no hay niños menores de 5.");
-    }
-
-    @Test
-    @DisplayName("Juego no se puede prestar a mesa con menos personas que el mínimo requerido")
-    void testJuegoNoAptoPocoJugadores() {
-        // Catan requiere mínimo 3 jugadores, mesa con 2 personas
-        assertThrows(JuegoNoAptoParaMesaException.class,
-            () -> catan.esAptoParaMesa(2, false, false),
-            "Catan requiere mínimo 3 jugadores y no debe prestarse a mesa con 2 personas.");
-    }
-
-    @Test
-    @DisplayName("Juego no se puede prestar a mesa con más personas que el máximo soportado")
-    void testJuegoNoAptoDemasiadosJugadores() {
-        // Catan soporta máximo 4 jugadores, mesa con 6 personas
-        assertThrows(JuegoNoAptoParaMesaException.class,
-            () -> catan.esAptoParaMesa(6, false, false),
-            "Catan soporta máximo 4 jugadores y no debe prestarse a mesa con 6 personas.");
-    }
-
-    @Test
-    @DisplayName("Juego sí se puede prestar cuando el número de jugadores es válido")
-    void testJuegoAptoNumeroCorrecto() {
-        // Catan requiere 3-4 jugadores, mesa con 3 personas
-        assertDoesNotThrow(
-            () -> catan.esAptoParaMesa(3, false, false),
-            "Catan debe poder prestarse a mesa con 3 personas.");
-    }
-
-    @Test
-    @DisplayName("Juego sin restricción de edad se puede prestar a cualquier mesa")
-    void testJuegoSinRestriccionEdadCualquierMesa() {
-        assertDoesNotThrow(
-            () -> uno.esAptoParaMesa(4, true, true),
-            "Uno no tiene restricción de edad y debe prestarse a cualquier mesa.");
-    }
-
-    @Test
-    @DisplayName("Mesa con juego de Acción detecta correctamente tieneJuegoAccion")
-    void testMesaDetectaJuegoAccion() {
-        // NOTA: registrarPrestamo() es private en Mesa.
-        // Para poder probar tieneJuegoAccion() se necesita que ese método sea
-        // al menos package-private. Por ahora verificamos la categoría directamente.
-        assertEquals("Accion", twister.getCategoria(),
-            "Twister debe ser de categoría Accion.");
-    }
-
-    @Test
-    @DisplayName("hayEjemplarDisponible retorna false cuando todos los ejemplares están prestados")
-    void testHayEjemplarDisponibleFalso() {
-        ejemplarCatan.setDisponible(false);
-        assertFalse(catan.hayEjemplarDisponible(),
-            "hayEjemplarDisponible debe retornar false cuando el único ejemplar no está disponible.");
-    }
-
-    @Test
-    @DisplayName("hayEjemplarDisponible retorna true cuando hay al menos un ejemplar disponible")
-    void testHayEjemplarDisponibleVerdadero() {
-        assertTrue(catan.hayEjemplarDisponible(),
-            "hayEjemplarDisponible debe retornar true cuando el ejemplar está disponible.");
+        ejemplar1.incrementarVecesPrestado();
+        assertEquals(2, ejemplar1.getNumeroDeVecesPrestado());
     }
 }

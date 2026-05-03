@@ -28,7 +28,7 @@ public class ConsolaCliente extends ConsolaBasica {
 					break;
 				case 3:
 					ConsolaVentas consolaVentas = new ConsolaVentas();
-					consolaVentas.iniciar();
+					consolaVentas.iniciar(inventarioVenta,cliente);
 					break;
 				case 4:
 					ConsolaJuegosFavoritos consolaJuegosFavoritos = new ConsolaJuegosFavoritos();

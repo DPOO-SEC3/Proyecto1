@@ -10,14 +10,14 @@ public class ConsolaVentas extends ConsolaBasica{
 		return super.mostrarMenu("VENTAS", new String[] {"Comprar Juego", "Comprar item cafeteria", "Volver al menu principal" });
 	}
 	
-	public void iniciar() {
+	public<T extends Persona & IComprar> void iniciar(InventarioVenta inventarioVenta, T user) {
 		System.out.println("Bienvenido a la gestión de ventas. Aquí podrás realizar compras de juegos de mesa y artículos de cafetería.");
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuVentas();
 			switch (opcionElegida) {
 				case 1:
-					System.out.println("Funcionalidad de comprar juego aún no implementada.");
+					comprarJuego(inventarioVenta,user);
 					break;
 				case 2:
 					System.out.println("Funcionalidad de comprar item cafetería aún no implementada.");
