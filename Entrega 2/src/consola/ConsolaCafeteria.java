@@ -53,6 +53,12 @@ public class ConsolaCafeteria extends ConsolaBasica {
     	System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
 		cargarJuegosEInventarios();
 		cargarUsuarios();
+		empleados.clear();
+		for (Persona p : usuarios) {
+		    if (p instanceof Empleado) {
+		        empleados.add((Empleado) p);
+		    }
+		}
 		cargarTurnos();
 		inicializarMesas(10);
 		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
