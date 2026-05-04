@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestsCliente {
+public class TestsClientes {
 
     private Cliente cliente;
     private Mesa mesa;

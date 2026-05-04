@@ -43,7 +43,7 @@ public class VentaCafeteria extends Venta {
 	{
 		this.propina=propina;
 	}
-	protected double calcularSubtotal()
+	public double calcularSubtotal()
 	{
 		this.subtotal=0;
 		for (ItemMenu comida: items)
@@ -52,7 +52,7 @@ public class VentaCafeteria extends Venta {
 		}
 		return subtotal;
 	}
-	protected double calcularTotal()
+	public double calcularTotal()
 	{
 		this.total=subtotal+getImpuestoConsumo()+propina;
 		return total;

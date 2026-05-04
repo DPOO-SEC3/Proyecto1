@@ -33,6 +33,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private List<Torneo> torneosDisponibles = new ArrayList<Torneo>();
     private Mesa mesaEmpleados= new Mesa(0,100);
     private List<Empleado> empleados = new ArrayList<>();
+    private List<ItemMenu> itemsMenu = new ArrayList<ItemMenu>();
 
  
     // Persistencias
@@ -116,17 +117,17 @@ public class ConsolaCafeteria extends ConsolaBasica {
 				if(usuarios.get(indexUsuarioEncontrado) instanceof Cliente) {
 					System.out.println("Has iniciado sesión como Cliente.");
 					ConsolaCliente consolaCliente = new ConsolaCliente();
-					consolaCliente.iniciar(inventarioVenta,inventarioPrestamo,todosLosJuegos,(Cliente) usuarios.get(indexUsuarioEncontrado),mesasDisponibles,torneosDisponibles);
+					consolaCliente.iniciar(inventarioVenta,inventarioPrestamo,todosLosJuegos,(Cliente) usuarios.get(indexUsuarioEncontrado),mesasDisponibles,torneosDisponibles,itemsMenu);
 					}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Mesero) {
 					System.out.println("Has iniciado sesión como Mesero.");
 					ConsolaEmpleado consolaEmpleado = new ConsolaEmpleado();
-					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Mesero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados);
+					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Mesero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados,itemsMenu);
 				}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Cocinero) {
 					System.out.println("Has iniciado sesión como Cocinero.");
 					ConsolaEmpleado consolaEmpleado = new ConsolaEmpleado();
-					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Cocinero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados);
+					consolaEmpleado.iniciarEmpleado(inventarioVenta,inventarioPrestamo, mesaEmpleados, (Cocinero) usuarios.get(indexUsuarioEncontrado), torneosDisponibles, empleados, itemsMenu);
 				}
 				else if(usuarios.get(indexUsuarioEncontrado) instanceof Administrador) {
 					System.out.println("Has iniciado sesión como Administrador.");

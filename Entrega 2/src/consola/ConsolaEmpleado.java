@@ -72,7 +72,8 @@ public class ConsolaEmpleado extends ConsolaBasica {
             Mesa mesa,
             T user,
             List<Torneo> torneosDisponibles,
-            List<Empleado> empleados) {
+            List<Empleado> empleados,
+            List<ItemMenu> itemsMenu) {
 
         int opcion;
 
@@ -91,7 +92,7 @@ public class ConsolaEmpleado extends ConsolaBasica {
 
                 case 3:
                     ConsolaVentas consolaVentas = new ConsolaVentas();
-                    consolaVentas.iniciar(inventarioVenta, user);
+                    consolaVentas.iniciar(inventarioVenta, user,mesa,itemsMenu);
                     break;
 
                 case 4:

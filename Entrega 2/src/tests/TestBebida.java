@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestsBebida {
+public class TestBebida {
 
     private Mesa mesaConMenores;
     private Mesa mesaSinMenores;

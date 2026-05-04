@@ -26,7 +26,7 @@ public class VentaJuego extends Venta {
 	{
 		return (subtotal*IVA);
 	}
-	protected double calcularSubtotal()
+	public double calcularSubtotal()
 	{
 		this.subtotal=0;
 		for (JuegoMesa juego: juegos)
@@ -35,7 +35,7 @@ public class VentaJuego extends Venta {
 		}
 		return subtotal;
 	}
-	protected double calcularTotal()
+	public double calcularTotal()
 	{
 		this.total=subtotal+(this.getIVA(subtotal));
 		return total;

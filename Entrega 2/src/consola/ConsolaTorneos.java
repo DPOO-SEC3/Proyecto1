@@ -90,10 +90,10 @@ public class ConsolaTorneos extends ConsolaBasica{
 			opcionElegida = mostrarMenuAdminTorneos();
 			switch (opcionElegida) {
 				case 1:
-					System.out.println("Funcionalidad de crear torneo aún no implementada.");
+					crearTorneo(torneosDisponibles,juegosDisponibles);
 					break;
 				case 2:
-					System.out.println("Funcionalidad de eliminar torneo aún no implementada.");
+					eliminarTorneo(torneosDisponibles);
 					break;
 				case 3:
 					System.out.println("Volviendo al menú principal...");

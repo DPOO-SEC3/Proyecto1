@@ -10,7 +10,7 @@ public class ConsolaCliente extends ConsolaBasica {
 		int opcionElegida= super.mostrarMenu("--------MENU DE CLIENTE--------", opciones);
 		return opcionElegida;
 	}
-	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, Cliente cliente, List<Mesa> mesas, List<Torneo> torneosDisponibles) {
+	public void iniciar(InventarioVenta inventarioVenta, InventarioPrestamo inventarioPrestamo, List<JuegoMesa> juegosDisponibles, Cliente cliente, List<Mesa> mesas, List<Torneo> torneosDisponibles, List<ItemMenu> itemsMenu) {
 		int opcionElegida;
 		do {
 			opcionElegida = mostrarMenuCliente();
@@ -28,7 +28,7 @@ public class ConsolaCliente extends ConsolaBasica {
 					break;
 				case 3:
 					ConsolaVentas consolaVentas = new ConsolaVentas();
-					consolaVentas.iniciar(inventarioVenta,cliente);
+					consolaVentas.iniciar(inventarioVenta,cliente,cliente.getMesa(),itemsMenu);
 					break;
 				case 4:
 					ConsolaJuegosFavoritos consolaJuegosFavoritos = new ConsolaJuegosFavoritos();
