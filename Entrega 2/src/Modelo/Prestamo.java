@@ -24,7 +24,7 @@ public class Prestamo {
 		fechaHoraInicio=LocalDateTime.now();
 	}
 	public void setFechaHoraFinal() {
-		fechaHoraInicio=LocalDateTime.now();
+		fechaHoraDevolucion=LocalDateTime.now();
 	}
 
 	public LocalDateTime getFechaHoraInicio() {
@@ -69,6 +69,12 @@ public class Prestamo {
 		this.estado="desaparecido";
 		this.ejemplar.marcarDesaparecido();
 		
+	}
+	public void setFechaHoraInicioManual(LocalDateTime localDateTime) {
+		fechaHoraInicio = localDateTime;
+	}
+	public void setFechaHoraDevolucionManual(LocalDateTime localDateTime) {
+		fechaHoraDevolucion = localDateTime;
 	}
 }
 

@@ -43,6 +43,10 @@ public class VentaCafeteria extends Venta {
 	{
 		this.propina=propina;
 	}
+	@Override
+	public double getSubtotal() {
+	    return calcularSubtotal();
+	}
 	public double calcularSubtotal()
 	{
 		this.subtotal=0;

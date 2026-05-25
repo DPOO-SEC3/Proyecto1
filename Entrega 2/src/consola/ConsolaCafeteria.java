@@ -2,15 +2,20 @@ package consola;
  
 import Modelo.*;
 import Persistencia.PersistenciaJuegos;
+import Persistencia.PersistenciaPrestamos;
 import Persistencia.PersistenciaTurnos;
 import Persistencia.PersistenciaUsuarios;
+import Persistencia.PersistenciaVentas;
 import excepciones.CapacidadMaximaSuperadaException;
 import excepciones.PersistenciaException;
- 
+import interfaz.VentanaBienvenida;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
 
 import consola.ConsolaInventarios;
  
@@ -34,17 +39,23 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private Mesa mesaEmpleados= new Mesa(0,100);
     private List<Empleado> empleados = new ArrayList<>();
     private List<ItemMenu> itemsMenu = new ArrayList<ItemMenu>();
+    private List<Venta>    ventas    = new ArrayList<>();
+    private List<Prestamo> prestamos = new ArrayList<>();
 
  
     // Persistencias
     private PersistenciaJuegos   persistenciaJuegos;
     private PersistenciaUsuarios persistenciaUsuarios;
     private PersistenciaTurnos   persistenciaTurnos;
+    private PersistenciaVentas   persistenciaVentas;
+    private PersistenciaPrestamos persistenciaPrestamos;
  
     public ConsolaCafeteria() {
         persistenciaJuegos   = new PersistenciaJuegos();
         persistenciaUsuarios = new PersistenciaUsuarios();
         persistenciaTurnos   = new PersistenciaTurnos();
+        persistenciaVentas   = new PersistenciaVentas();
+        persistenciaPrestamos = new PersistenciaPrestamos();
     }
  
     public static void main(String[] args) {
@@ -54,6 +65,16 @@ public class ConsolaCafeteria extends ConsolaBasica {
     	System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
 		cargarJuegosEInventarios();
 		cargarUsuarios();
+		try {
+		    ventas = persistenciaVentas.cargarVentas(usuarios, todosLosJuegos);
+		} catch (PersistenciaException e) {
+		    System.out.println("[WARN] No se pudieron cargar ventas: " + e.getMessage());
+		}
+		try {
+		    prestamos = persistenciaPrestamos.cargarPrestamos(inventarioPrestamo);
+		} catch (PersistenciaException e) {
+		    System.out.println("[WARN] No se pudieron cargar préstamos: " + e.getMessage());
+		}
 		empleados.clear();
 		for (Persona p : usuarios) {
 		    if (p instanceof Empleado) {
@@ -62,23 +83,29 @@ public class ConsolaCafeteria extends ConsolaBasica {
 		}
 		cargarTurnos();
 		inicializarMesas(10);
-		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
-		do {
-			switch (inicio) {
-			case 1:
-				iniciarSesion();
-				break;
-			case 2:
-				registrarUsuario();
-				break;
-			case 3:
-				System.out.println("Saliendo del sistema. ¡Hasta luego!");
-				return;
-			default:
-				System.out.println("Opción no válida. Por favor, elija una opción del menú.");
-			}
-		} while (inicio != 3);
-	}
+		SwingUtilities.invokeLater(() ->
+	    new VentanaBienvenida(usuarios, todosLosJuegos,
+	        inventarioPrestamo, inventarioVenta, turnos)
+	    .setVisible(true)
+	);
+    }
+//		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
+//		do {
+//			switch (inicio) {
+//			case 1:
+//				iniciarSesion();
+//				break;
+//			case 2:
+//				registrarUsuario();
+//				break;
+//			case 3:
+//				System.out.println("Saliendo del sistema. ¡Hasta luego!");
+//				return;
+//			default:
+//				System.out.println("Opción no válida. Por favor, elija una opción del menú.");
+//			}
+//		} while (inicio != 3);
+//	}
     
     private void registrarUsuario() {
     	
@@ -292,6 +319,18 @@ public class ConsolaCafeteria extends ConsolaBasica {
         } catch (Exception e) {
             System.out.println("[ERROR] Al guardar turnos: " + e.getMessage());
         }
+        try {
+			persistenciaVentas.guardarVentas(ventas);
+		} catch (PersistenciaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			persistenciaPrestamos.guardarPrestamos(prestamos);
+		} catch (PersistenciaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
  
     // Datos de ejemplo (solo se usan si no hay archivos previos)

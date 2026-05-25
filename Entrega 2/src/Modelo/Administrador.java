@@ -7,14 +7,14 @@ import java.time.LocalTime;
 
 public class Administrador extends Persona {
 	
-	private InventarioPrestamo inventarioPrestamo = new InventarioPrestamo(100);
-	private InventarioVenta inventarioVenta = new InventarioVenta(100);
+	private InventarioPrestamo inventarioPrestamo;
+	private InventarioVenta inventarioVenta;
 
 	private List<SugerenciaPlatillo> sugerencias = new ArrayList<>();
 	private List<SolicitudCambioTurno> solicitudes = new ArrayList<>();
 	private List<TurnoSemanal> turnos = new ArrayList<>();
-	private List<Venta> ventas = new ArrayList<>();
-	private List<Prestamo> prestamos = new ArrayList<>();
+	private List<Venta> ventas;
+	private List<Prestamo> prestamos;
 	private List<ItemMenu> itemsMenu = new ArrayList<>();
 
     public Administrador(String nombre, String apellido, String correoElectronico, String contrasena, String login) {
@@ -131,4 +131,10 @@ public class Administrador extends Persona {
 		Torneo torneo = new Torneo(nombre, numeroParticipantes, juego, diaSemana, tipo);
 		return torneo;
 	}
+    public void setEstadoSistema(InventarioPrestamo ip, InventarioVenta iv,List<Venta> ventas, List<Prestamo> prestamos) {
+			this.inventarioPrestamo = ip;
+			this.inventarioVenta    = iv;
+			this.ventas             = ventas;
+			this.prestamos          = prestamos;
+    }
 }

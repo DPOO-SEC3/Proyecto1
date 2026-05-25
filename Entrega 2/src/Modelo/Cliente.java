@@ -44,8 +44,8 @@ public class Cliente extends Persona implements ISolicitarPrestamo, IComprar, IJ
     }
 
     public void liberarMesa() {
+    	mesa.liberar();
         this.mesa = null;
-        mesa.liberar();
     }
     
 

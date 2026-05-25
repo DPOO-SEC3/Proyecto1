@@ -26,6 +26,9 @@ public abstract class Venta {
 	public double getSubtotal() {
 		return subtotal;
 	}
+	public double getTotal() { 
+		return total; 
+	}
 	public double getDescuentoAplicado() {
 		return descuentoAplicado;
 	}
