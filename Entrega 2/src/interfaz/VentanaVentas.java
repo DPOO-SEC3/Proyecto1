@@ -296,4 +296,6 @@ public class VentanaVentas extends JFrame {
             return this;
         }
     }
+    
+    
 }

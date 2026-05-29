@@ -16,17 +16,23 @@ public class VentanaBienvenida extends JFrame {
     private InventarioPrestamo inventarioPrestamo;
     private InventarioVenta    inventarioVenta;
     private List<TurnoSemanal> turnos;
+    private List<Venta> ventas;
+    private List<Prestamo> prestamos;
+    private List<ItemMenu> itemsMenu;
 
     public VentanaBienvenida(List<Persona> usuarios,
                               List<JuegoMesa> todosLosJuegos,
                               InventarioPrestamo inventarioPrestamo,
                               InventarioVenta inventarioVenta,
-                              List<TurnoSemanal> turnos) {
+                              List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
         this.inventarioVenta   = inventarioVenta;
         this.turnos            = turnos;
+        this.ventas            = ventas;
+        this.prestamos         = prestamos;
+        this.itemsMenu         = itemsMenu;
 
         setTitle("DulcesnDados");
         setSize(400, 250);
@@ -56,13 +62,13 @@ public class VentanaBienvenida extends JFrame {
 
         btnRegistrarse.addActionListener(e -> {
             new VentanaRegistro(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
             dispose();
         });
 
         btnLogin.addActionListener(e -> {
             new VentanaLogin(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
             dispose();
         });
 

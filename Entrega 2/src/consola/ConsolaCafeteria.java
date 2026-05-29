@@ -82,12 +82,16 @@ public class ConsolaCafeteria extends ConsolaBasica {
 		    }
 		}
 		cargarTurnos();
+		crearMenu();
+		cargarVentas();
+		cargarPrestamos();
 		inicializarMesas(10);
 		SwingUtilities.invokeLater(() ->
 	    new VentanaBienvenida(usuarios, todosLosJuegos,
-	        inventarioPrestamo, inventarioVenta, turnos)
+	        inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu)
 	    .setVisible(true)
 	);
+		guardarTodo();
     }
 //		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
 //		do {
@@ -106,6 +110,19 @@ public class ConsolaCafeteria extends ConsolaBasica {
 //			}
 //		} while (inicio != 3);
 //	}
+    private void crearMenu() {
+    	Pasteleria pastel= new Pasteleria("pastel", "delicioso", 10.14, Arrays.asList("Chcolate","Gluten"));
+    	itemsMenu.add(pastel);
+    	Bebida cafe= new Bebida(false,"18", "cafe", "rico cafe",12.3);
+    	itemsMenu.add(cafe);
+    	Pasteleria pan= new Pasteleria("pan", "delicioso", 10.14,Arrays.asList("Chcolate","Gluten"));
+    	itemsMenu.add(pan);
+    	Bebida agua= new Bebida(false,"18", "agua", "rica",12.3);
+    	itemsMenu.add(agua);
+    	Pasteleria papas= new Pasteleria("papas", "delicioso", 10.14,Arrays.asList("Chcolate","Gluten"));
+    	Bebida limonada= new Bebida(false,"18", "limonada", "rica",12.3);
+    	itemsMenu.add(limonada);
+    }
     
     private void registrarUsuario() {
     	
@@ -120,6 +137,25 @@ public class ConsolaCafeteria extends ConsolaBasica {
     	usuarios.add(cliente);
     	System.out.println("Usuario registrado exitosamente. Ahora puedes iniciar sesión con tu nuevo usuario.");
     	
+    }
+    private void cargarPrestamos() {
+        try {
+            prestamos = persistenciaPrestamos.cargarPrestamos(inventarioPrestamo);
+            System.out.println("[OK] Préstamos cargados: " + prestamos.size());
+        } catch (PersistenciaException e) {
+            System.out.println("[WARN] No se pudieron cargar préstamos: " + e.getMessage());
+            prestamos = new ArrayList<>();
+        }
+    }
+
+    private void cargarVentas() {
+        try {
+            ventas = persistenciaVentas.cargarVentas(usuarios, todosLosJuegos);
+            System.out.println("[OK] Ventas cargadas: " + ventas.size());
+        } catch (PersistenciaException e) {
+            System.out.println("[WARN] No se pudieron cargar ventas: " + e.getMessage());
+            ventas = new ArrayList<>();
+        }
     }
 	private void iniciarSesion() {
 		do {

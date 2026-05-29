@@ -16,17 +16,23 @@ public class VentanaRegistro extends JFrame {
     private InventarioPrestamo inventarioPrestamo;
     private InventarioVenta    inventarioVenta;
     private List<TurnoSemanal> turnos;
+    private List<Venta> ventas;
+    private List<Prestamo> prestamos;
+    private List<ItemMenu> itemsMenu;
 
     public VentanaRegistro(List<Persona> usuarios,
                             List<JuegoMesa> todosLosJuegos,
                             InventarioPrestamo inventarioPrestamo,
                             InventarioVenta inventarioVenta,
-                            List<TurnoSemanal> turnos) {
+                            List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
         this.inventarioVenta   = inventarioVenta;
         this.turnos            = turnos;
+        this.ventas            = ventas;
+        this.prestamos         = prestamos;
+        this.itemsMenu         = itemsMenu;
 
         setTitle("Registro");
         setSize(380, 320);
@@ -70,7 +76,7 @@ public class VentanaRegistro extends JFrame {
         btnRegistrar.addActionListener(e -> registrar());
         btnVolver.addActionListener(e -> {
             new VentanaBienvenida(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
             dispose();
         });
 
@@ -113,7 +119,7 @@ public class VentanaRegistro extends JFrame {
             "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
 
         new VentanaLogin(usuarios, todosLosJuegos,
-            inventarioPrestamo, inventarioVenta, turnos).setVisible(true);
+            inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
         dispose();
     }
 }

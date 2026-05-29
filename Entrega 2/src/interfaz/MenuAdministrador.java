@@ -15,19 +15,24 @@ public class MenuAdministrador extends JFrame {
     private List<TurnoSemanal> turnos;
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
+    private List<ItemMenu> itemsMenu;
 
     public MenuAdministrador(Administrador admin,
                               List<Persona> usuarios,
                               List<JuegoMesa> todosLosJuegos,
                               InventarioPrestamo inventarioPrestamo,
                               InventarioVenta inventarioVenta,
-                              List<TurnoSemanal> turnos) {
+                              List<TurnoSemanal> turnos,
+                              List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.admin             = admin;
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
         this.inventarioVenta   = inventarioVenta;
         this.turnos            = turnos;
+        this.ventas            = ventas;
+        this.prestamos         = prestamos;
+        this.itemsMenu         = itemsMenu;
 
         setTitle("Menú Administrador – " + admin.getNombre());
         setSize(320, 380);
@@ -51,7 +56,7 @@ public class MenuAdministrador extends JFrame {
         agregarBoton(panel, "Ver todos los turnos",        e -> verTodosTurnos());
         agregarBoton(panel, "Gestionar solicitudes",       e -> JOptionPane.showMessageDialog(this, "Próximamente."));
         agregarBoton(panel, "Ver usuarios",                e -> verUsuarios());
-        agregarBoton(panel, "ver graficos del negocio", e -> abrirPanelGraficas());
+        agregarBoton(panel, "Ver graficos del negocio", e -> abrirPanelGraficas());
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         agregarBoton(panel, "Cerrar sesión", e -> {

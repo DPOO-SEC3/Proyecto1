@@ -21,17 +21,21 @@ public class VentanaLogin extends JFrame {
     private List<TurnoSemanal> turnos;
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
+    private List<ItemMenu> itemsMenu;
 
     public VentanaLogin(List<Persona> usuarios,
                         List<JuegoMesa> todosLosJuegos,
                         InventarioPrestamo inventarioPrestamo,
                         InventarioVenta inventarioVenta,
-                        List<TurnoSemanal> turnos) {
+                        List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
         this.inventarioVenta   = inventarioVenta;
         this.turnos            = turnos;
+        this.ventas            = ventas;
+        this.prestamos         = prestamos;
+        this.itemsMenu         = itemsMenu;
 
         setTitle("Iniciar sesión");
         setSize(350, 230);
@@ -83,7 +87,7 @@ public class VentanaLogin extends JFrame {
         btnEntrar.addActionListener(e -> intentarLogin());
         btnVolver.addActionListener(e -> {
             new VentanaBienvenida(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
             dispose();
         });
 
@@ -110,15 +114,15 @@ public class VentanaLogin extends JFrame {
     private void abrirMenuSegunRol(Persona usuario) {
         if (usuario instanceof Administrador) {
             new MenuAdministrador((Administrador) usuario, usuarios,
-                todosLosJuegos, inventarioPrestamo, inventarioVenta, turnos)
+                todosLosJuegos, inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu)
                 .setVisible(true);
 
         } else if (usuario instanceof Empleado) {
-            new MenuEmpleado((Empleado) usuario, turnos).setVisible(true);
+            new MenuEmpleado((Empleado) usuario, turnos,ventas,prestamos,itemsMenu).setVisible(true);
 
         } else if (usuario instanceof Cliente) {
             new MenuCliente((Cliente) usuario, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta).setVisible(true);
+                inventarioPrestamo, inventarioVenta,ventas,prestamos,itemsMenu).setVisible(true);
         }
     }
 }

@@ -12,10 +12,17 @@ public class MenuEmpleado extends JFrame {
 
     private Empleado           empleado;
     private List<TurnoSemanal> turnos;
+    private List<Venta> ventas;
+    private List<Prestamo> prestamos;
+    private List<ItemMenu> itemsMenu;
 
-    public MenuEmpleado(Empleado empleado, List<TurnoSemanal> turnos) {
+    public MenuEmpleado(Empleado empleado, List<TurnoSemanal> turnos,
+            List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.empleado = empleado;
         this.turnos   = turnos;
+        this.ventas   = ventas;
+        this.prestamos = prestamos;
+        this.itemsMenu = itemsMenu;
 
         String rol = empleado instanceof Mesero ? "Mesero" : "Cocinero";
         setTitle("Menú " + rol + " – " + empleado.getNombre());

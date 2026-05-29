@@ -20,11 +20,15 @@ public class MenuCliente extends JFrame {
     public MenuCliente(Cliente cliente,
                        List<JuegoMesa> todosLosJuegos,
                        InventarioPrestamo inventarioPrestamo,
-                       InventarioVenta inventarioVenta) {
+                       InventarioVenta inventarioVenta,
+                       List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.cliente           = cliente;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
         this.inventarioVenta   = inventarioVenta;
+        this.itemsMenu         = itemsMenu;
+        this.ventas            = ventas;
+        this.prestamos         = prestamos;
 
         setTitle("Menú Cliente – " + cliente.getNombre());
         setSize(320, 380);
