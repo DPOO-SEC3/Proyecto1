@@ -16,15 +16,17 @@ public class MenuEmpleado extends JFrame {
     private List<Prestamo> prestamos;
     private List<ItemMenu> itemsMenu;
     private List<Persona> usuarios;
+    private List<Torneo> torneosDisponibles;
 
     public MenuEmpleado(Empleado empleado, List<Persona> usuarios, List<TurnoSemanal> turnos,
-            List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
+            List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu, List<Torneo> torneosDisponibles) {
         this.empleado = empleado;
         this.turnos   = turnos;
         this.ventas   = ventas;
         this.prestamos = prestamos;
         this.itemsMenu = itemsMenu;
         this.usuarios = usuarios;
+        this.torneosDisponibles = torneosDisponibles;
 
         String rol = empleado instanceof Mesero ? "Mesero" : "Cocinero";
         setTitle("Menú " + rol + " – " + empleado.getNombre());
@@ -46,6 +48,7 @@ public class MenuEmpleado extends JFrame {
 
         agregarBoton(panel, "Ver mis turnos",              e -> verMisTurnos());
         agregarBoton(panel, "Solicitar cambio de turno", e -> abrirSolicitudCambio());
+        agregarBoton(panel, "Torneos", e -> abrirTorneos());
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         agregarBoton(panel, "Cerrar sesión", e -> {
@@ -79,5 +82,9 @@ public class MenuEmpleado extends JFrame {
     
     private void abrirSolicitudCambio() {
         new VentanaSolicitarCambioTurno(empleado, usuarios).setVisible(true);
+    }
+    
+    private void abrirTorneos() {
+        new VentanaTorneos(empleado, torneosDisponibles, turnos).setVisible(true);
     }
 }

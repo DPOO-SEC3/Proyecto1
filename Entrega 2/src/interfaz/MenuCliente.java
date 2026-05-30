@@ -17,10 +17,15 @@ public class MenuCliente extends JFrame {
     private List<ItemMenu> itemsMenu;
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
+    private List<Torneo> torneosDisponibles;
+    private List<TurnoSemanal> turnos;
+    
     public MenuCliente(Cliente cliente,
                        List<JuegoMesa> todosLosJuegos,
                        InventarioPrestamo inventarioPrestamo,
                        InventarioVenta inventarioVenta,
+                       List<Torneo> torneosDisponibles,
+                       List<TurnoSemanal> turnos,
                        List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.cliente           = cliente;
         this.todosLosJuegos    = todosLosJuegos;
@@ -29,6 +34,8 @@ public class MenuCliente extends JFrame {
         this.itemsMenu         = itemsMenu;
         this.ventas            = ventas;
         this.prestamos         = prestamos;
+        this.torneosDisponibles = torneosDisponibles;
+        this.turnos = turnos;
 
         setTitle("Menú Cliente – " + cliente.getNombre());
         setSize(320, 380);
@@ -56,6 +63,7 @@ public class MenuCliente extends JFrame {
         agregarBoton(panel, "Ver catálogo de juegos",   e -> verCatalogo());
         agregarBoton(panel, "Pedir prestamo/devolver juego",        e -> abrirMenuPrestamos());
         agregarBoton(panel, "Comprar juego/ cafeteria",             e -> abrirMenuCompras());
+        agregarBoton(panel, "Torneos", e -> abrirTorneos());
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         agregarBoton(panel, "Cerrar sesión", e -> cerrarSesion());
@@ -99,6 +107,10 @@ public class MenuCliente extends JFrame {
     private void cerrarSesion() {
         JOptionPane.showMessageDialog(this, "Sesión cerrada.");
         System.exit(0);
+    }
+    
+    private void abrirTorneos() {
+        new VentanaTorneos(cliente, torneosDisponibles, turnos).setVisible(true);
     }
 }
 

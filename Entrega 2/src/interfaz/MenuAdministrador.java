@@ -16,13 +16,15 @@ public class MenuAdministrador extends JFrame {
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
     private List<ItemMenu> itemsMenu;
+    private List<Torneo> torneosDisponibles;
 
     public MenuAdministrador(Administrador admin,
                               List<Persona> usuarios,
-                              List<JuegoMesa> todosLosJuegos,
+                              List<JuegoMesa> todosLosJuegos,                       
                               InventarioPrestamo inventarioPrestamo,
                               InventarioVenta inventarioVenta,
                               List<TurnoSemanal> turnos,
+                              List<Torneo> torneosDisponibles,
                               List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.admin             = admin;
         this.usuarios          = usuarios;
@@ -33,6 +35,7 @@ public class MenuAdministrador extends JFrame {
         this.ventas            = ventas;
         this.prestamos         = prestamos;
         this.itemsMenu         = itemsMenu;
+        this.torneosDisponibles = torneosDisponibles;
 
         setTitle("Menú Administrador – " + admin.getNombre());
         setSize(320, 380);
@@ -57,6 +60,7 @@ public class MenuAdministrador extends JFrame {
         agregarBoton(panel, "Gestionar solicitudes", e -> abrirGestionSolicitudes());
         agregarBoton(panel, "Ver usuarios",                e -> verUsuarios());
         agregarBoton(panel, "Ver graficos del negocio", e -> abrirPanelGraficas());
+        agregarBoton(panel, "Crear torneo", e -> abrirCrearTorneo());
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         agregarBoton(panel, "Cerrar sesión", e -> {
@@ -147,6 +151,10 @@ public class MenuAdministrador extends JFrame {
 
     private void abrirGestionSolicitudes() {
         new VentanaGestionSolicitudes(admin, usuarios).setVisible(true);
+    }
+    
+    private void abrirCrearTorneo() {
+        new VentanaCrearTorneo(admin, torneosDisponibles, todosLosJuegos).setVisible(true);
     }
 }
 

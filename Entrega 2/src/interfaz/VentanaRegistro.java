@@ -19,12 +19,13 @@ public class VentanaRegistro extends JFrame {
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
     private List<ItemMenu> itemsMenu;
+    private List<Torneo> torneosDisponibles;
 
     public VentanaRegistro(List<Persona> usuarios,
                             List<JuegoMesa> todosLosJuegos,
                             InventarioPrestamo inventarioPrestamo,
                             InventarioVenta inventarioVenta,
-                            List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
+                            List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu, List<Torneo> torneosDisponibles) {
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
@@ -33,6 +34,7 @@ public class VentanaRegistro extends JFrame {
         this.ventas            = ventas;
         this.prestamos         = prestamos;
         this.itemsMenu         = itemsMenu;
+        this.torneosDisponibles = torneosDisponibles;
 
         setTitle("Registro");
         setSize(380, 320);
@@ -76,7 +78,7 @@ public class VentanaRegistro extends JFrame {
         btnRegistrar.addActionListener(e -> registrar());
         btnVolver.addActionListener(e -> {
             new VentanaBienvenida(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu, torneosDisponibles).setVisible(true);
             dispose();
         });
 
@@ -119,7 +121,7 @@ public class VentanaRegistro extends JFrame {
             "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
 
         new VentanaLogin(usuarios, todosLosJuegos,
-            inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
+            inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu, torneosDisponibles).setVisible(true);
         dispose();
     }
 }

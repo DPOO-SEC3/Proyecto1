@@ -1,0 +1,18 @@
+{"solicitudes": [
+    {
+        "fecha": "2026-05-29",
+        "tipo": "Intercambio",
+        "estado": "aprobada",
+        "motivo": "Tengo clase en la tarde",
+        "solicitanteLogin": "luis",
+        "empleadoDestinoLogin": null
+    },
+    {
+        "fecha": "2026-05-29",
+        "tipo": "Intercambio",
+        "estado": "aprobada",
+        "motivo": "Tengo una boda",
+        "solicitanteLogin": "luis",
+        "empleadoDestinoLogin": null
+    }
+]}

@@ -22,12 +22,14 @@ public class VentanaLogin extends JFrame {
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
     private List<ItemMenu> itemsMenu;
+    private List<Torneo> torneosDisponibles;
+    
 
     public VentanaLogin(List<Persona> usuarios,
                         List<JuegoMesa> todosLosJuegos,
                         InventarioPrestamo inventarioPrestamo,
                         InventarioVenta inventarioVenta,
-                        List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
+                        List<TurnoSemanal> turnos, List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu, List<Torneo> torneosDisponibles) {
         this.usuarios          = usuarios;
         this.todosLosJuegos    = todosLosJuegos;
         this.inventarioPrestamo = inventarioPrestamo;
@@ -36,6 +38,7 @@ public class VentanaLogin extends JFrame {
         this.ventas            = ventas;
         this.prestamos         = prestamos;
         this.itemsMenu         = itemsMenu;
+        this.torneosDisponibles = torneosDisponibles;
 
         setTitle("Iniciar sesión");
         setSize(350, 230);
@@ -87,7 +90,7 @@ public class VentanaLogin extends JFrame {
         btnEntrar.addActionListener(e -> intentarLogin());
         btnVolver.addActionListener(e -> {
             new VentanaBienvenida(usuarios, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu).setVisible(true);
+                inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu, torneosDisponibles).setVisible(true);
             dispose();
         });
 
@@ -114,15 +117,15 @@ public class VentanaLogin extends JFrame {
     private void abrirMenuSegunRol(Persona usuario) {
         if (usuario instanceof Administrador) {
             new MenuAdministrador((Administrador) usuario, usuarios,
-                todosLosJuegos, inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu)
+                todosLosJuegos, inventarioPrestamo, inventarioVenta, turnos, torneosDisponibles, ventas,prestamos,itemsMenu)
                 .setVisible(true);
 
         } else if (usuario instanceof Empleado) {
-            new MenuEmpleado((Empleado) usuario, usuarios, turnos, ventas, prestamos, itemsMenu).setVisible(true);
+            new MenuEmpleado((Empleado) usuario, usuarios, turnos, ventas, prestamos, itemsMenu, torneosDisponibles).setVisible(true);
 
         } else if (usuario instanceof Cliente) {
             new MenuCliente((Cliente) usuario, todosLosJuegos,
-                inventarioPrestamo,inventarioVenta, ventas,prestamos, itemsMenu).setVisible(true);
+                inventarioPrestamo,inventarioVenta, torneosDisponibles, turnos, ventas,prestamos, itemsMenu).setVisible(true);
         }
     }
 }

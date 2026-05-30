@@ -7,6 +7,7 @@ import Persistencia.PersistenciaTurnos;
 import Persistencia.PersistenciaUsuarios;
 import Persistencia.PersistenciaVentas;
 import Persistencia.PersistenciaSolicitudesCambioTurno;
+import Persistencia.PersistenciaTorneos;
 import excepciones.CapacidadMaximaSuperadaException;
 import excepciones.PersistenciaException;
 import interfaz.VentanaBienvenida;
@@ -28,6 +29,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private static final String RUTA_USUARIOS = "datos/usuarios.json";
     private static final String RUTA_TURNOS   = "datos/turnos.json";
     private static final String RUTA_SOLICITUDES = "datos/solicitudes.json";
+    private static final String RUTA_TORNEOS = "datos/torneos.json";
  
     // Estado de la aplicación
     private List<JuegoMesa>    todosLosJuegos;
@@ -52,6 +54,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private PersistenciaVentas   persistenciaVentas;
     private PersistenciaPrestamos persistenciaPrestamos;
     private PersistenciaSolicitudesCambioTurno persistenciaSolicitudes;
+    private PersistenciaTorneos persistenciaTorneos;
  
     public ConsolaCafeteria() {
         persistenciaJuegos   = new PersistenciaJuegos();
@@ -60,6 +63,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
         persistenciaVentas   = new PersistenciaVentas();
         persistenciaPrestamos = new PersistenciaPrestamos();
         persistenciaSolicitudes = new PersistenciaSolicitudesCambioTurno();
+        persistenciaTorneos = new PersistenciaTorneos();
     }
  
     public static void main(String[] args) {
@@ -70,6 +74,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
 		cargarJuegosEInventarios();
 		cargarUsuarios();
 		cargarSolicitudes();
+		cargarTorneos();
 		try {
 		    ventas = persistenciaVentas.cargarVentas(usuarios, todosLosJuegos);
 		} catch (PersistenciaException e) {
@@ -96,7 +101,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
 			);
 		SwingUtilities.invokeLater(() ->
 	    new VentanaBienvenida(usuarios, todosLosJuegos,
-	        inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu)
+	        inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu, torneosDisponibles)
 	    .setVisible(true)
 	);
     }
@@ -380,6 +385,12 @@ public class ConsolaCafeteria extends ConsolaBasica {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        try {
+            persistenciaTorneos.guardarTorneos(torneosDisponibles, RUTA_TORNEOS);
+            System.out.println("[OK] Torneos guardados.");
+        } catch (Exception e) {
+            System.out.println("[ERROR] Al guardar torneos: " + e.getMessage());
+        }
     }
  
     // Datos de ejemplo (solo se usan si no hay archivos previos)
@@ -433,6 +444,16 @@ public class ConsolaCafeteria extends ConsolaBasica {
             System.out.println("[OK] Solicitudes cargadas.");
         } catch (Exception e) {
             System.out.println("[WARN] No se pudieron cargar solicitudes: " + e.getMessage());
+        }
+    }
+    
+    private void cargarTorneos() {
+        try {
+            torneosDisponibles = persistenciaTorneos.cargarTorneos(RUTA_TORNEOS, todosLosJuegos, usuarios);
+            System.out.println("[OK] Torneos cargados: " + torneosDisponibles.size());
+        } catch (Exception e) {
+            System.out.println("[WARN] No se pudieron cargar torneos: " + e.getMessage());
+            torneosDisponibles = new ArrayList<>();
         }
     }
 }
