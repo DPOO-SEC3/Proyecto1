@@ -10,19 +10,21 @@ import java.util.List;
  */
 public class MenuEmpleado extends JFrame {
 
-    private Empleado           empleado;
+    private Empleado empleado;
     private List<TurnoSemanal> turnos;
     private List<Venta> ventas;
     private List<Prestamo> prestamos;
     private List<ItemMenu> itemsMenu;
+    private List<Persona> usuarios;
 
-    public MenuEmpleado(Empleado empleado, List<TurnoSemanal> turnos,
+    public MenuEmpleado(Empleado empleado, List<Persona> usuarios, List<TurnoSemanal> turnos,
             List<Venta> ventas, List<Prestamo> prestamos, List<ItemMenu> itemsMenu) {
         this.empleado = empleado;
         this.turnos   = turnos;
         this.ventas   = ventas;
         this.prestamos = prestamos;
         this.itemsMenu = itemsMenu;
+        this.usuarios = usuarios;
 
         String rol = empleado instanceof Mesero ? "Mesero" : "Cocinero";
         setTitle("Menú " + rol + " – " + empleado.getNombre());
@@ -43,7 +45,7 @@ public class MenuEmpleado extends JFrame {
         panel.add(Box.createRigidArea(new Dimension(0, 25)));
 
         agregarBoton(panel, "Ver mis turnos",              e -> verMisTurnos());
-        agregarBoton(panel, "Solicitar cambio de turno",   e -> JOptionPane.showMessageDialog(this, "Próximamente."));
+        agregarBoton(panel, "Solicitar cambio de turno", e -> abrirSolicitudCambio());
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         agregarBoton(panel, "Cerrar sesión", e -> {
@@ -73,5 +75,9 @@ public class MenuEmpleado extends JFrame {
         }
         String texto = sb.length() > 0 ? sb.toString() : "No tienes turnos asignados.";
         JOptionPane.showMessageDialog(this, texto, "Mis turnos", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    private void abrirSolicitudCambio() {
+        new VentanaSolicitarCambioTurno(empleado, usuarios).setVisible(true);
     }
 }

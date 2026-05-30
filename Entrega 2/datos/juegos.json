@@ -5,12 +5,14 @@
       {
         "estado": "Nuevo",
         "desaparecido": false,
+        "ID": "Catan-1",
         "disponible": true,
         "numeroDeVecesPrestado": 0
       },
       {
         "estado": "Bueno",
         "desaparecido": false,
+        "ID": "Catan-2",
         "disponible": true,
         "numeroDeVecesPrestado": 0
       }
@@ -29,6 +31,7 @@
     "ejemplares": [{
       "estado": "Nuevo",
       "desaparecido": false,
+      "ID": "Uno-1",
       "disponible": true,
       "numeroDeVecesPrestado": 0
     }],
@@ -46,6 +49,7 @@
     "ejemplares": [{
       "estado": "Bueno",
       "desaparecido": false,
+      "ID": "Twister-1",
       "disponible": true,
       "numeroDeVecesPrestado": 0
     }],

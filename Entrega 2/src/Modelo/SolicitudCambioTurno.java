@@ -55,4 +55,16 @@ public class SolicitudCambioTurno {
     public void rechazar() {
         this.estado = "rechazada";
     }
+    
+    @Override
+    public String toString() {
+        String destino = empleadoDestino != null 
+            ? empleadoDestino.getNombre() + " " + empleadoDestino.getApellido()
+            : "Sin empleado destino";
+
+        return tipo + " | " + estado + " | " 
+            + solicitante.getNombre() + " " + solicitante.getApellido()
+            + " → " + destino
+            + " | " + motivo;
+    }
 }

@@ -53,8 +53,8 @@ public class MenuAdministrador extends JFrame {
 
         agregarBoton(panel, "Ver inventario de préstamo",  e -> verInventarioPrestamo());
         agregarBoton(panel, "Ver inventario de venta",     e -> verInventarioVenta());
-        agregarBoton(panel, "Ver todos los turnos",        e -> verTodosTurnos());
-        agregarBoton(panel, "Gestionar solicitudes",       e -> JOptionPane.showMessageDialog(this, "Próximamente."));
+        agregarBoton(panel, "Gestionar turnos", e -> abrirGestionTurnos());
+        agregarBoton(panel, "Gestionar solicitudes", e -> abrirGestionSolicitudes());
         agregarBoton(panel, "Ver usuarios",                e -> verUsuarios());
         agregarBoton(panel, "Ver graficos del negocio", e -> abrirPanelGraficas());
 
@@ -77,9 +77,17 @@ public class MenuAdministrador extends JFrame {
     }
     
     private void abrirPanelGraficas() {
-    	PanelGraficas panel = new PanelGraficas(admin,todosLosJuegos,inventarioPrestamo,inventarioVenta,ventas,prestamos);
+        PanelGraficas panel = new PanelGraficas(
+            admin,
+            todosLosJuegos,
+            inventarioPrestamo,
+            inventarioVenta,
+            ventas,
+            prestamos
+        );
+        panel.setVisible(true);
     }
-
+    
     private void verInventarioPrestamo() {
         StringBuilder sb = new StringBuilder();
         for (EjemplarJuego e : inventarioPrestamo.getEjemplares()) {
@@ -132,5 +140,14 @@ public class MenuAdministrador extends JFrame {
         scroll.setPreferredSize(new Dimension(380, 200));
         JOptionPane.showMessageDialog(this, scroll, titulo, JOptionPane.PLAIN_MESSAGE);
     }
+    
+    private void abrirGestionTurnos() {
+        new VentanaGestionTurnos(admin, usuarios, turnos).setVisible(true);
+    }
+
+    private void abrirGestionSolicitudes() {
+        new VentanaGestionSolicitudes(admin, usuarios).setVisible(true);
+    }
 }
+
 

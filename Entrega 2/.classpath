@@ -8,7 +8,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/jdgm2/OneDrive/UNIANDES/DPOO/Proyecto/Proyecto1/Entrega 2/lib/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jdgm2/OneDrive/UNIANDES/DPOO/Proyecto/Proyecto1/Entrega 2/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

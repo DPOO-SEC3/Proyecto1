@@ -6,6 +6,7 @@ import Persistencia.PersistenciaPrestamos;
 import Persistencia.PersistenciaTurnos;
 import Persistencia.PersistenciaUsuarios;
 import Persistencia.PersistenciaVentas;
+import Persistencia.PersistenciaSolicitudesCambioTurno;
 import excepciones.CapacidadMaximaSuperadaException;
 import excepciones.PersistenciaException;
 import interfaz.VentanaBienvenida;
@@ -26,6 +27,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
  
     private static final String RUTA_USUARIOS = "datos/usuarios.json";
     private static final String RUTA_TURNOS   = "datos/turnos.json";
+    private static final String RUTA_SOLICITUDES = "datos/solicitudes.json";
  
     // Estado de la aplicación
     private List<JuegoMesa>    todosLosJuegos;
@@ -49,6 +51,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     private PersistenciaTurnos   persistenciaTurnos;
     private PersistenciaVentas   persistenciaVentas;
     private PersistenciaPrestamos persistenciaPrestamos;
+    private PersistenciaSolicitudesCambioTurno persistenciaSolicitudes;
  
     public ConsolaCafeteria() {
         persistenciaJuegos   = new PersistenciaJuegos();
@@ -56,6 +59,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
         persistenciaTurnos   = new PersistenciaTurnos();
         persistenciaVentas   = new PersistenciaVentas();
         persistenciaPrestamos = new PersistenciaPrestamos();
+        persistenciaSolicitudes = new PersistenciaSolicitudesCambioTurno();
     }
  
     public static void main(String[] args) {
@@ -65,6 +69,7 @@ public class ConsolaCafeteria extends ConsolaBasica {
     	System.out.println("=== DulcesnDados - Inicializando sistema ===\n");
 		cargarJuegosEInventarios();
 		cargarUsuarios();
+		cargarSolicitudes();
 		try {
 		    ventas = persistenciaVentas.cargarVentas(usuarios, todosLosJuegos);
 		} catch (PersistenciaException e) {
@@ -86,12 +91,14 @@ public class ConsolaCafeteria extends ConsolaBasica {
 		cargarVentas();
 		cargarPrestamos();
 		inicializarMesas(10);
+		Runtime.getRuntime().addShutdownHook(
+			    new Thread(() -> guardarTodo())
+			);
 		SwingUtilities.invokeLater(() ->
 	    new VentanaBienvenida(usuarios, todosLosJuegos,
 	        inventarioPrestamo, inventarioVenta, turnos,ventas,prestamos,itemsMenu)
 	    .setVisible(true)
 	);
-		guardarTodo();
     }
 //		int inicio =super.mostrarMenu("BIENVENIDO A DULCESNDADOS ", new String[] {"Ya tengo una cuenta (Iniciar sesión)", "Soy Nuevo ( Registrarse )" , "Salir"});
 //		do {
@@ -331,6 +338,12 @@ public class ConsolaCafeteria extends ConsolaBasica {
 
     // Guardado
     private void guardarTodo() {
+    	try {
+    	    persistenciaSolicitudes.guardarSolicitudes(usuarios, RUTA_SOLICITUDES);
+    	    System.out.println("[OK] Solicitudes guardadas.");
+    	} catch (Exception e) {
+    	    System.out.println("[ERROR] Al guardar solicitudes: " + e.getMessage());
+    	}
         try {
             persistenciaJuegos.guardarJuegos(todosLosJuegos);
             persistenciaJuegos.guardarInventarios(inventarioPrestamo, inventarioVenta, todosLosJuegos);
@@ -412,5 +425,14 @@ public class ConsolaCafeteria extends ConsolaBasica {
         // Turnos
         turnos.add(new TurnoSemanal("Lunes", LocalTime.of(8, 0), LocalTime.of(16, 0), mesero));
         turnos.add(new TurnoSemanal("Lunes", LocalTime.of(8, 0), LocalTime.of(16, 0), cocinero));
+    }
+    
+    private void cargarSolicitudes() {
+        try {
+            persistenciaSolicitudes.cargarSolicitudes(RUTA_SOLICITUDES, usuarios);
+            System.out.println("[OK] Solicitudes cargadas.");
+        } catch (Exception e) {
+            System.out.println("[WARN] No se pudieron cargar solicitudes: " + e.getMessage());
+        }
     }
 }

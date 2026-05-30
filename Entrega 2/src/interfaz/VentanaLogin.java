@@ -118,11 +118,11 @@ public class VentanaLogin extends JFrame {
                 .setVisible(true);
 
         } else if (usuario instanceof Empleado) {
-            new MenuEmpleado((Empleado) usuario, turnos,ventas,prestamos,itemsMenu).setVisible(true);
+            new MenuEmpleado((Empleado) usuario, usuarios, turnos, ventas, prestamos, itemsMenu).setVisible(true);
 
         } else if (usuario instanceof Cliente) {
             new MenuCliente((Cliente) usuario, todosLosJuegos,
-                inventarioPrestamo, inventarioVenta,ventas,prestamos,itemsMenu).setVisible(true);
+                inventarioPrestamo,inventarioVenta, ventas,prestamos, itemsMenu).setVisible(true);
         }
     }
 }
