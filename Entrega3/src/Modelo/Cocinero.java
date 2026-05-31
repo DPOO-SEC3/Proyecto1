@@ -1,0 +1,151 @@
+package Modelo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDateTime;
+
+public class Cocinero extends Empleado{
+
+    private TurnoSemanal turno;
+    private List<SolicitudCambioTurno> solicitudes;
+    private List<SugerenciaPlatillo> sugerencias;
+    private List<Prestamo> prestamos;
+    private List<Venta> ventas;
+    private List<JuegoMesa> favoritos;
+    private List<Torneo> torneosInscritos = new ArrayList<>();
+
+    public Cocinero(String nombre, String apellido, String correoElectronico, String contrasena, String login) {
+        super(nombre, apellido, correoElectronico, contrasena, login);
+        this.solicitudes = new ArrayList<>();
+        this.sugerencias = new ArrayList<>();
+        this.prestamos = new ArrayList<>();
+        this.ventas = new ArrayList<>();
+        this.favoritos = new ArrayList<>();
+    }
+
+    @Override
+    public TurnoSemanal getTurnoSemanal() {
+        return turno;
+    }
+
+    @Override
+    public boolean estaEnTurno() {
+        return turno != null && turno.estaActivo();
+    }
+
+    @Override
+    public List<SolicitudCambioTurno> getSolicitudesCambio() {
+        return solicitudes;
+    }
+
+    @Override
+    public List<SugerenciaPlatillo> getSugerencias() {
+        return sugerencias;
+    }
+
+    @Override
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    @Override
+    public List<Venta> getVentas() {
+        return ventas;
+    }
+
+    @Override
+    public List<JuegoMesa> getJuegosFavoritos() {
+        return favoritos;
+    }
+
+    @Override
+    public SolicitudCambioTurno solicitarCambioTurno(String tipo, String motivo, Empleado otro) {
+        SolicitudCambioTurno solicitud = new SolicitudCambioTurno(tipo, motivo, this, otro);
+        solicitudes.add(solicitud);
+        return solicitud;
+    }
+
+    @Override
+    public SugerenciaPlatillo sugerirPlatillo(String descripcion) {
+    	SugerenciaPlatillo s = new SugerenciaPlatillo(descripcion, this);
+        sugerencias.add(s);
+        return s;
+    }
+
+    @Override
+    public Prestamo solicitarPrestamo(InventarioPrestamo inventarioPrestamo,EjemplarJuego ejemplar, Mesa mesa) {
+        Prestamo p = new Prestamo(inventarioPrestamo,ejemplar,mesa);
+        prestamos.add(p);
+        return p;
+    }
+
+    @Override
+    public void devolverJuego(Prestamo prestamo) {
+        prestamos.remove(prestamo);
+    }
+
+    @Override 
+    public VentaJuego comprarJuegos(List<JuegoMesa> juegos, String codigoDescuento, InventarioVenta inventarioVenta) {
+         VentaJuego venta = new VentaJuego(juegos,LocalDateTime.now(),codigoDescuento, this,inventarioVenta);
+         ventas.add(venta);
+         for(JuegoMesa juego : juegos) {
+ 			 inventarioVenta.removerJuego(juego);
+ 		 }
+         return venta;
+     }
+
+     @Override
+     public VentaCafeteria comprarCafeteria(List<ItemMenu> items,String codigoDescuento, double propina) {
+         VentaCafeteria venta = new VentaCafeteria(LocalDateTime.now(),codigoDescuento, this, propina);
+         venta.getItems().addAll(items);
+         ventas.add(venta);
+         return venta;
+     }
+
+    @Override
+    public void agregarFavorito(JuegoMesa juego) {
+        favoritos.add(juego);
+    }
+
+    @Override
+    public void eliminarFavorito(JuegoMesa juego) {
+        favoritos.remove(juego);
+    }
+    @Override
+    public Prestamo buscarPrestamoActivo(String nombreEjemplar) {
+    	for (Prestamo prestamo : prestamos) {
+			if (prestamo.estaActivo() && prestamo.getEjemplar().getJuegoMesa().getNombre().equals(nombreEjemplar)) {
+				return prestamo;
+			}
+		}
+		return null; 
+    }
+    
+    @Override
+    public Torneo inscribirTorneo(List<Torneo> torneosDisponibles, String nombreTorneo, List<Persona> participantes) {
+    	for(Torneo torneo : torneosDisponibles) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				torneo.setParticipantes(participantes);
+				torneosInscritos.add(torneo);
+				return torneo;
+			}
+		}
+		System.out.println("Torneo no encontrado o ya lleno.");
+		return null;
+	}
+    @Override
+    public void retirarTorneo(String nombreTorneo, List<Persona> participantes) {
+		for(Torneo torneo : torneosInscritos) {
+			if(torneo.getNombre().equals(nombreTorneo)) {
+				for (Persona p : participantes) {
+					torneo.retirarParticipante(p);
+				}
+				torneosInscritos.remove(torneo);
+				return;
+			} else {
+				System.out.println("Torneo no encontrado.");
+				return;
+			}
+		}
+    }
+}

@@ -1,0 +1,35 @@
+{"usuarios": [
+    {
+        "tipo": "Cliente",
+        "apellido": "Garcia",
+        "correo": "ana@mail.com",
+        "contrasena": "1234",
+        "login": "ana",
+        "puntos": 0,
+        "nombre": "Ana"
+    },
+    {
+        "tipo": "Mesero",
+        "apellido": "Perez",
+        "correo": "luis@mail.com",
+        "contrasena": "1234",
+        "login": "luis",
+        "nombre": "Luis"
+    },
+    {
+        "tipo": "Cocinero",
+        "apellido": "Lopez",
+        "correo": "marta@mail.com",
+        "contrasena": "1234",
+        "login": "marta",
+        "nombre": "Marta"
+    },
+    {
+        "tipo": "Administrador",
+        "apellido": "Diaz",
+        "correo": "carlos@mail.com",
+        "contrasena": "admin",
+        "login": "admin",
+        "nombre": "Carlos"
+    }
+]}

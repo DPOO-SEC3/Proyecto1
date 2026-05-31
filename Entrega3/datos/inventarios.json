@@ -1,0 +1,30 @@
+{
+  "inventarioVenta": {
+    "juegos": [
+      1,
+      2
+    ],
+    "capacidadMaxima": 100
+  },
+  "inventarioPrestamo": {
+    "ejemplares": [
+      {
+        "indiceEjemplar": 0,
+        "indiceJuego": 0
+      },
+      {
+        "indiceEjemplar": 1,
+        "indiceJuego": 0
+      },
+      {
+        "indiceEjemplar": 0,
+        "indiceJuego": 1
+      },
+      {
+        "indiceEjemplar": 0,
+        "indiceJuego": 2
+      }
+    ],
+    "capacidadMaxima": 100
+  }
+}
